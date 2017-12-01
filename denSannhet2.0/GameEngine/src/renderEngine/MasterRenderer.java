@@ -9,9 +9,13 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
+import animation.AnimatedModel;
+import animation.AnimatedModelRenderer;
+import animation.AnimatedModelShader;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import models.RawModel;
 import models.TexturedModel;
 import shaders.StaticShader;
 import shaders.TerrainShader;
@@ -34,6 +38,10 @@ public class MasterRenderer {
 	
 	private StaticShader shader = new StaticShader();
 	private EntityRenderer renderer;
+	
+	// ADDED Variables needed to render animated entity
+	private AnimatedModelShader animatedModelShader = new AnimatedModelShader();
+	private AnimatedModelRenderer animatedModelRenderer;
 	
 	private TerrainRenderer terrainRenderer;
 	private TerrainShader terrainShader = new TerrainShader();
@@ -65,6 +73,7 @@ public class MasterRenderer {
 		createProjectionMatrix();
 		renderer = new EntityRenderer(shader, projectionMatrix);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+		animatedModelRenderer = new AnimatedModelRenderer(animatedModelShader, projectionMatrix); // ADDED
 	}
 	
 	/**
@@ -130,12 +139,17 @@ public class MasterRenderer {
 		
 	}
 	
+	public void processAnimatedEntity(AnimatedModel entity) {
+		animatedModelRenderer.render(entity);
+	}
+	
 	/**
 	 * Cleanup the shader, when game is closed.
 	 */
 	public void cleanUp() {
 		shader.cleanUp();
 		terrainShader.cleanUp();
+		animatedModelShader.cleanUp(); // ADDED
 		
 	}
 	

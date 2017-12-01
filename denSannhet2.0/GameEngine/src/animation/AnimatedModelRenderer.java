@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import animation.AnimatedModel;
 import models.RawModel;
+import renderEngine.MasterRenderer;
 import textures.ModelTexture;
 import toolbox.Maths;
 import engineTester.OpenGlUtils;
@@ -75,7 +76,7 @@ public class AnimatedModelRenderer {
 //			MasterRenderer.disableCulling();
 //		}
 //		shader.loadFakeLightingVariable(texture.isUseFakeLighting());
-		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
+//		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getModelTexture().getID());
 	}
@@ -90,7 +91,7 @@ public class AnimatedModelRenderer {
 	
 	// ADDED
 	private void unbindTexturedModel() {
-//		MasterRenderer.enableCulling();
+		MasterRenderer.enableCulling();
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
 		GL20.glDisableVertexAttribArray(2);

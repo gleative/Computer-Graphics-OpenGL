@@ -111,30 +111,32 @@ public class MainGameLoop {
 	// Models end
 			
 	// Animation
-//			AnimatedModelLoader animatedLoader = new AnimatedModelLoader();
+			AnimatedModelLoader animatedLoader = new AnimatedModelLoader();
 			
-//			AnimatedModel animatedEntity = animatedLoader.loadAnimatedModel("model", "diffuse", new Vector3f(200, -4, 300), 0, 90, 0, 1, loader);
+			AnimatedModel animatedEntity = animatedLoader.loadAnimatedModel("model", "diffuse", new Vector3f(200, -4, 300), 0, 90, 0, 1, loader);
 			
-//			Animation runAnimation = animatedLoader.loadAnimation("model");
+			Animation runAnimation = animatedLoader.loadAnimation("model");
 			
-//			AnimatedPlayer animatedPlayer = new AnimatedPlayer(animatedEntity, runAnimation);
+			AnimatedPlayer animatedPlayer = new AnimatedPlayer(animatedEntity, runAnimation);
 			
-//			Camera cameraOnAnimatedPlayer = new Camera(animatedPlayer);
+			Camera cameraOnAnimatedPlayer = new Camera(animatedPlayer);
 			
 		
 	// MainLoop
 		while(!Display.isCloseRequested()){
 			
 			collisionMultipleTerrains(player, terrains);
-			renderer.processEntity(player); // No player if this is gone
+//			renderer.processEntity(player); // No player if this is gone
 			camera.Move();
 			renderTerrain(renderer, terrains);
 			renderEntities(renderer, entities); // All entities are gone if this is commented away. Player is still present
 			
 			// Render with animation
 //			renderer.render(lights, camera, animatedEntity);
+			renderer.processAnimatedEntity(animatedPlayer); // Accepts AnimatedPlayer type aswell, because it extends "AnimationModel"
+			animatedPlayer.update();
 			
-			// render without animation
+			// render without animation	
 			renderer.render(lights, camera); // Completely black if commented away
 			guiRenderer.render(guis);
 			

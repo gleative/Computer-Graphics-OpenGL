@@ -70,8 +70,8 @@ public class Loader {
 		storeDataInAttributeList(0, 3, positions);
 		storeDataInAttributeList(1, 2, textureCoords);
 		storeDataInAttributeList(2, 3, normals);
-		storeDataInAttributeList(3,3, vertexWeights);
-		storeIntDataInAttributeList(4,3, jointIds);
+		storeIntDataInAttributeList(3,3, jointIds);
+		storeDataInAttributeList(4,3, vertexWeights);
 		return new RawModel(vaoID, positions.length / 2);
 	}
 	

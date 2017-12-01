@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="animation.AnimatedModelLoader"/>
-<fullyQualifiedTypeName name="animation.AnimatedModel"/>
 <fullyQualifiedTypeName name="animation.Animation"/>
 <fullyQualifiedTypeName name="animation.AnimatedPlayer"/>
+<fullyQualifiedTypeName name="animation.AnimatedModelShader"/>
+<fullyQualifiedTypeName name="animation.AnimatedModelRenderer"/>
+<fullyQualifiedTypeName name="animation.AnimatedModel"/>
+<fullyQualifiedTypeName name="models.RawModel"/>
+<fullyQualifiedTypeName name="renderEngine.MasterRenderer"/>
 </qualifiedTypeNameHistroy>
