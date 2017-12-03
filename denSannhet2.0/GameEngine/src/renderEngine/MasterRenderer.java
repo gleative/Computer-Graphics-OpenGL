@@ -97,13 +97,14 @@ public class MasterRenderer {
 	 * @param sun
 	 * @param camera
 	 */
-	public void render(List<Light> lights, Camera camera) {
+	public void render(List<Light> lights, Camera camera/*,AnimatedModel animatedPlayer*/) {
 		prepare();
 		shader.start();
 		shader.loadSkyColour(RED, GREEN, BLUE);
 		shader.loadLights(lights);
 		shader.loadViewMatrix(camera);
 		renderer.render(entities);
+//		animatedModelRenderer.render(animatedPlayer);
 		shader.stop();
 		terrainShader.start();
 		terrainShader.loadSkyColour(RED, GREEN, BLUE);

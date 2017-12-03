@@ -113,7 +113,7 @@ public class MainGameLoop {
 	// Animation
 			AnimatedModelLoader animatedLoader = new AnimatedModelLoader();
 			
-			AnimatedModel animatedEntity = animatedLoader.loadAnimatedModel("model", "diffuse", new Vector3f(200, -4, 300), 0, 90, 0, 1, loader);
+			AnimatedModel animatedEntity = animatedLoader.loadAnimatedModel("model", "diffuse", new Vector3f(210, -100, 300), 0, 90, 0, 1, loader);
 			
 			Animation runAnimation = animatedLoader.loadAnimation("model");
 			
@@ -125,19 +125,30 @@ public class MainGameLoop {
 	// MainLoop
 		while(!Display.isCloseRequested()){
 			
-			collisionMultipleTerrains(player, terrains);
+			collisionMultipleTerrainsAnimatedPlayer(animatedPlayer, terrains); // Move method for player is inside this method
+//			collisionMultipleTerrains(player, terrains);
+			
+			// ----------------------
+			
+			renderer.processAnimatedEntity(animatedPlayer); // Accepts AnimatedPlayer type aswell, because it extends "AnimationModel"
+			
+			animatedPlayer.update();
+			
+			// ----------------------
+			
 //			renderer.processEntity(player); // No player if this is gone
-			camera.Move();
+			cameraOnAnimatedPlayer.Move();
 			renderTerrain(renderer, terrains);
 			renderEntities(renderer, entities); // All entities are gone if this is commented away. Player is still present
 			
 			// Render with animation
 //			renderer.render(lights, camera, animatedEntity);
-			renderer.processAnimatedEntity(animatedPlayer); // Accepts AnimatedPlayer type aswell, because it extends "AnimationModel"
-			animatedPlayer.update();
+//			renderer.processAnimatedEntity(animatedPlayer); // Accepts AnimatedPlayer type aswell, because it extends "AnimationModel"
+//			animatedPlayer.update();
 			
 			// render without animation	
-			renderer.render(lights, camera); // Completely black if commented away
+			//renderer.render(lights, camera); // Completely black if commented away
+			renderer.render(lights, cameraOnAnimatedPlayer); // This made so it rendered
 			guiRenderer.render(guis);
 			
 			DisplayManager.updateDisplay();
@@ -187,6 +198,21 @@ public class MainGameLoop {
 	}
 	
 	private static void collisionMultipleTerrains(Player player, List<Terrain> terrains) {
+		int px = (int) player.getPosition().x;
+		int pz = (int) player.getPosition().z;
+		
+		if( px <= 800 && px >= 0 && pz >= -800 && pz <= 0) {       // x: 0 to 800 and z: 0 to -800
+			player.move(terrains.get(0));
+		}else if ( px >= -800 && px <= 0 && pz >= -800 && pz <= 0 ) {	// x: 0 to -800 and z: 0 to -800
+			player.move(terrains.get(1));
+		}else if ( px >= -800 && px <= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to -800 and z: 0 to 800
+			player.move(terrains.get(2));
+		}else if ( px <= 800 && px >= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to 800 and z: 0 to 800
+			player.move(terrains.get(3));
+		}
+	}
+	
+	private static void collisionMultipleTerrainsAnimatedPlayer(AnimatedPlayer player, List<Terrain> terrains) {
 		int px = (int) player.getPosition().x;
 		int pz = (int) player.getPosition().z;
 		
