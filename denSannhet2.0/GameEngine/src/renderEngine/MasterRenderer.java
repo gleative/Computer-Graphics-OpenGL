@@ -72,8 +72,9 @@ public class MasterRenderer {
 		enableCulling();
 		createProjectionMatrix();
 		renderer = new EntityRenderer(shader, projectionMatrix);
-		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 		animatedModelRenderer = new AnimatedModelRenderer(animatedModelShader, projectionMatrix); // ADDED
+		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+		
 	}
 	
 	/**
@@ -97,15 +98,23 @@ public class MasterRenderer {
 	 * @param sun
 	 * @param camera
 	 */
-	public void render(List<Light> lights, Camera camera/*,AnimatedModel animatedPlayer*/) {
+	public void render(List<Light> lights, Camera camera, AnimatedModel animatedPlayer) {
 		prepare();
 		shader.start();
 		shader.loadSkyColour(RED, GREEN, BLUE);
 		shader.loadLights(lights);
 		shader.loadViewMatrix(camera);
 		renderer.render(entities);
-//		animatedModelRenderer.render(animatedPlayer);
 		shader.stop();
+		
+		animatedModelShader.start();
+		animatedModelShader.loadSkyColor(RED, GREEN, BLUE);
+		animatedModelShader.loadLights(lights);
+		animatedModelShader.loadViewMatrix(camera);
+//		animatedModelShader.loadJointTransforms(animatedPlayer.getJointTransforms()); // We load the joint transforms in the AnimatedModelRenderer
+		animatedModelRenderer.render(animatedPlayer);
+		animatedModelShader.stop();
+		
 		terrainShader.start();
 		terrainShader.loadSkyColour(RED, GREEN, BLUE);
 		terrainShader.loadLights(lights);
@@ -116,6 +125,7 @@ public class MasterRenderer {
 		terrains.clear();
 		// clearing hashMap
 		entities.clear();
+		
 	}
 	
 	public void processTerrain(Terrain terrain) {
@@ -149,9 +159,8 @@ public class MasterRenderer {
 	 */
 	public void cleanUp() {
 		shader.cleanUp();
-		terrainShader.cleanUp();
 		animatedModelShader.cleanUp(); // ADDED
-		
+		terrainShader.cleanUp();
 	}
 	
 	/**

@@ -57,7 +57,7 @@ public class AnimatedModelLoader {
 		AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelfile, GeneralSettings.MAX_WEIGHTS);
 		MeshData modelMesh = entityData.getMeshData();
 		RawModel model = loader.loadToVAO(modelMesh.getVertices(), modelMesh.getTextureCoords(), modelMesh.getNormals(), modelMesh.getIndices(), modelMesh.getJointIds(), modelMesh.getVertexWeights());
-		ModelTexture texture = new ModelTexture(loader.loadTexture("diffuse")); // Set texture
+		ModelTexture texture = new ModelTexture(loader.loadTexture(textureFile)); // Set texture
 		SkeletonData skeletonData = entityData.getJointsData();
 		Joint headJoint = createJoints(skeletonData.headJoint);
 		return new AnimatedModel(model, texture, headJoint, skeletonData.jointCount, position, rotX, rotY, rotZ, scale);

@@ -128,13 +128,6 @@ public class MainGameLoop {
 			collisionMultipleTerrainsAnimatedPlayer(animatedPlayer, terrains); // Move method for player is inside this method
 //			collisionMultipleTerrains(player, terrains);
 			
-			// ----------------------
-			
-			renderer.processAnimatedEntity(animatedPlayer); // Accepts AnimatedPlayer type aswell, because it extends "AnimationModel"
-			
-			animatedPlayer.update();
-			
-			// ----------------------
 			
 //			renderer.processEntity(player); // No player if this is gone
 			cameraOnAnimatedPlayer.Move();
@@ -142,13 +135,13 @@ public class MainGameLoop {
 			renderEntities(renderer, entities); // All entities are gone if this is commented away. Player is still present
 			
 			// Render with animation
-//			renderer.render(lights, camera, animatedEntity);
+			renderer.render(lights, cameraOnAnimatedPlayer, animatedEntity);
+//			renderer.render(lights, cameraOnAnimatedPlayer); // This made so it rendered
 //			renderer.processAnimatedEntity(animatedPlayer); // Accepts AnimatedPlayer type aswell, because it extends "AnimationModel"
-//			animatedPlayer.update();
+			animatedPlayer.update();
 			
 			// render without animation	
 			//renderer.render(lights, camera); // Completely black if commented away
-			renderer.render(lights, cameraOnAnimatedPlayer); // This made so it rendered
 			guiRenderer.render(guis);
 			
 			DisplayManager.updateDisplay();
