@@ -44,7 +44,7 @@ void main(void){
 	}
 	
 	
-	vec4 positionRelativeToCam = viewMatrix * worldPosition;
+	vec4 positionRelativeToCam = viewMatrix * worldPosition * totalLocalPos;
 	gl_Position = projectionMatrix * viewMatrix * transformationMatrix * totalLocalPos;
 	pass_textureCoords = (textureCoords / numberOfRows) + offset;
 	surfaceNormal = (transformationMatrix * vec4(normal,0.0)).xyz;

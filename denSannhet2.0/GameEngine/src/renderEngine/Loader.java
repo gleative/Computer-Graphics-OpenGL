@@ -144,7 +144,7 @@ public class Loader {
 	
 	/*
 	 * ADDED
-	 * Works the same as the method above, only that it takes in a int instead of float
+	 * Works the same as the method above, only that it takes in a int instead of float.
 	 */
 	private void storeIntDataInAttributeList(int attributeNumber, int coordinateSize, int[] data) {
 		int vboID = GL15.glGenBuffers();

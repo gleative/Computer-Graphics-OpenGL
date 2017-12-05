@@ -39,7 +39,7 @@ public class AnimatedModel {
 	private final Animator animator;
 	
 	// ADDED
-	Vector3f position;
+	private Vector3f position;
 	private float rotX, rotY, rotZ;
 	private float scale;
 	private Terrain terrain = null;
@@ -66,16 +66,7 @@ public class AnimatedModel {
 	 *            - the number of joints in the joint hierarchy (skeleton) for
 	 *            this entity.
 	 * 
-	 */
-//	public AnimatedModel(Vao model, Texture texture, Joint rootJoint, int jointCount) {
-//		this.model = model;
-//		this.texture = texture;
-//		this.rootJoint = rootJoint;
-//		this.jointCount = jointCount;
-//		this.animator = new Animator(this);
-//		rootJoint.calcInverseBindTransform(new Matrix4f());
-//	}
-	
+	 */	
 	public AnimatedModel(RawModel rawModel, ModelTexture modelTexture, Joint rootJoint, int jointCount, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		this.rawModel = rawModel;
 		this.modelTexture = modelTexture;
