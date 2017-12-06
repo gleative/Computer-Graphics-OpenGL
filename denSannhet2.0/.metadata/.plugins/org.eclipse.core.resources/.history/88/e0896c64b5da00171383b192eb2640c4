@@ -25,9 +25,9 @@ import models.TexturedModel;
 
 public class AnimatedModelLoader {
 	
-//	private TexturedModel model;
-//	private int jointCount = 0;
-//	private Joint rootJoint = new Joint(jointCount, null, null);
+	private TexturedModel model;
+	private int jointCount = 0;
+	private Joint rootJoint = new Joint(jointCount, null, null);
 	
 
 	/**

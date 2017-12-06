@@ -122,21 +122,23 @@ public class MainGameLoop {
 			
 			Camera cameraOnAnimatedPlayer = new Camera(animatedPlayer);
 			
+			createAnimationEntity();
+			
 		
 	// MainLoop
 		while(!Display.isCloseRequested()){
 			
-			collisionMultipleTerrainsAnimatedPlayer(animatedPlayer, terrains); // Move method for player is inside this method
+			collisionMultipleTerrainsAnimatedPlayer(animatedPlayer, animatedEntity, terrains); // Move method for player is inside this method
 //			collisionMultipleTerrains(player, terrains);
 			
 			
 //			renderer.processEntity(player); // No player if this is gone
-			cameraOnAnimatedPlayer.Move();
 			renderTerrain(renderer, terrains);
 			renderEntities(renderer, entities); // All entities are gone if this is commented away. Player is still present
 			
 			// Render with animation
 			renderer.render(lights, cameraOnAnimatedPlayer, animatedEntity);
+			cameraOnAnimatedPlayer.Move();
 //			renderer.render(lights, cameraOnAnimatedPlayer); // This made so it rendered
 //			renderer.processAnimatedEntity(animatedPlayer); // Accepts AnimatedPlayer type aswell, because it extends "AnimationModel"
 			animatedPlayer.update();
@@ -206,18 +208,18 @@ public class MainGameLoop {
 		}
 	}
 	
-	private static void collisionMultipleTerrainsAnimatedPlayer(AnimatedPlayer player, List<Terrain> terrains) {
+	private static void collisionMultipleTerrainsAnimatedPlayer(AnimatedPlayer player, AnimatedModel animatedEntity, List<Terrain> terrains) {
 		int px = (int) player.getPosition().x;
 		int pz = (int) player.getPosition().z;
 		
 		if( px <= 800 && px >= 0 && pz >= -800 && pz <= 0) {       // x: 0 to 800 and z: 0 to -800
-			player.move(terrains.get(0));
+			player.move(terrains.get(0), animatedEntity);
 		}else if ( px >= -800 && px <= 0 && pz >= -800 && pz <= 0 ) {	// x: 0 to -800 and z: 0 to -800
-			player.move(terrains.get(1));
+			player.move(terrains.get(1), animatedEntity);
 		}else if ( px >= -800 && px <= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to -800 and z: 0 to 800
-			player.move(terrains.get(2));
+			player.move(terrains.get(2), animatedEntity);
 		}else if ( px <= 800 && px >= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to 800 and z: 0 to 800
-			player.move(terrains.get(3));
+			player.move(terrains.get(3), animatedEntity);
 		}
 	}
 	
@@ -230,6 +232,10 @@ public class MainGameLoop {
 			temp.setNumberOfRows(numberOfRows);
 		}
 		return new TexturedModel(rawModel,temp);
+	}
+	
+	private void createAnimationEntity() {
+		
 	}
 	
 }
