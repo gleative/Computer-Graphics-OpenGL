@@ -25,7 +25,6 @@ import models.TexturedModel;
 
 public class AnimatedModelLoader {
 	
-	// ADDED
 	private TexturedModel model;
 	private int jointCount = 0;
 	private Joint rootJoint = new Joint(jointCount, null, null);
@@ -36,20 +35,16 @@ public class AnimatedModelLoader {
 	 * the collada model data, stores the extracted data in a VAO, sets up the
 	 * joint heirarchy, and loads up the entity's texture.
 	 * 
-	 * @param entityFile
-	 *            - the file containing the data for the entity.
-	 * @return The animated entity (no animation applied though)
+	 * @param modelFile
+	 * @param textureFile
+	 * @param position
+	 * @param rotX
+	 * @param rotY
+	 * @param rotZ
+	 * @param scale
+	 * @param loader
+	 * @return
 	 */
-//	public static AnimatedModel loadEntity(MyFile modelFile, MyFile textureFile) {
-//		AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelFile, GeneralSettings.MAX_WEIGHTS);
-//		Vao model = createVao(entityData.getMeshData());
-//		Texture texture = loadTexture(textureFile);
-//		SkeletonData skeletonData = entityData.getJointsData();
-//		Joint headJoint = createJoints(skeletonData.headJoint);
-//		return new AnimatedModel(model, texture, headJoint, skeletonData.jointCount);
-//	}
-	
-	// ADDED
 	public static AnimatedModel loadAnimatedModel(String modelFile, String textureFile, Vector3f position, float rotX, float rotY, float rotZ, float scale, Loader loader) {
 		MyFile modelfile = new MyFile("res", modelFile +".dae");
 		MyFile texturefile = new MyFile("res", textureFile + ".png");
@@ -63,7 +58,12 @@ public class AnimatedModelLoader {
 		return new AnimatedModel(model, texture, headJoint, skeletonData.jointCount, position, rotX, rotY, rotZ, scale);
 	}
 	
-	// ADDED
+	/**
+	 * Loads up the animation, by finding the keyframes in the collada file.
+	 * Creates the key frames, and initializes a new animation
+	 * @param file
+	 * @return
+	 */
 	public Animation loadAnimation(String file) {
 		MyFile colladaFile = new MyFile(new MyFile("res"), file + ".dae");
 		
@@ -109,44 +109,5 @@ public class AnimatedModelLoader {
 		}
 		return joint;
 	}
-
-//	/**
-//	 * Loads up the diffuse texture for the model.
-//	 * 
-//	 * @param textureFile
-//	 *            - the texture file.
-//	 * @return The diffuse texture.
-//	 */
-//	private static Texture loadTexture(MyFile textureFile) {
-//		Texture diffuseTexture = Texture.newTexture(textureFile).anisotropic().create();
-//		return diffuseTexture;
-//	}
-//	
-////	// ADDED
-////	private static TexturedModel loadTexture(RawModel model, ModelTexture texture) {
-////		TexturedModel diffuseTexture = new TexturedModel(model, texture);
-////		return diffuseTexture;
-////	}
-//
-//	/**
-//	 * Stores the mesh data in a VAO.
-//	 * 
-//	 * @param data
-//	 *            - all the data about the mesh that needs to be stored in the
-//	 *            VAO.
-//	 * @return The VAO containing all the mesh data for the model.
-//	 */
-//	private static Vao createVao(MeshData data) {
-//		Vao vao = Vao.create();
-//		vao.bind();
-//		vao.createIndexBuffer(data.getIndices());
-//		vao.createAttribute(0, data.getVertices(), 3);
-//		vao.createAttribute(1, data.getTextureCoords(), 2);
-//		vao.createAttribute(2, data.getNormals(), 3);
-//		vao.createIntAttribute(3, data.getJointIds(), 3);
-//		vao.createAttribute(4, data.getVertexWeights(), 3);
-//		vao.unbind();
-//		return vao;
-//	}
 
 }

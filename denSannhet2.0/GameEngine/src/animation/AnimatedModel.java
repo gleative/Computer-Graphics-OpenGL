@@ -19,20 +19,16 @@ import textures.ModelTexture;
  * its own {@link Animator} instance which can be used to apply animations to
  * this entity.
  * 
- * @author Karl
+ * @author Glenn Arne Christensen
  *
  */
 public class AnimatedModel {
-
-	// skin
-//	private final Vao model;
-//	private final Texture texture;
 	
-	// ADDED
+	// Skin of the animated model
 	private final RawModel rawModel;
 	private final ModelTexture modelTexture;
 
-	// skeleton
+	// Skeleton of the animated model
 	private final Joint rootJoint;
 	private final int jointCount;
 
@@ -40,8 +36,7 @@ public class AnimatedModel {
 	
 	// ADDED
 	private Vector3f position;
-	private float rotX, rotY, rotZ;
-	private float scale;
+	private float rotX, rotY, rotZ, scale;
 	private Terrain terrain = null;
 	
 
@@ -81,35 +76,84 @@ public class AnimatedModel {
 		rootJoint.calcInverseBindTransform(new Matrix4f());
 	}
 	
-	
-	// ADDED
+	/**
+	 * Makes so we can move the animated model
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 */
 	public void increasePosition(float dx, float dy, float dz) {
 		this.position.x += dx;
 		this.position.y += dy;
 		this.position.z += dz;
 	}
 	
+	/**
+	 * Change rotation of the entity
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 */
 	public void increaseRotation(float dx, float dy, float dz) {
 		this.rotX += dx;
 		this.rotY += dy;
 		this.rotZ += dz;
 	}
+	
+	/**
+	 * Instructs this entity to carry out a given animation. To do this it
+	 * basically sets the chosen animation as the current animation in the
+	 * {@link Animator} object.
+	 * 
+	 * @param animation
+	 *            - the animation to be carried out.
+	 */
+	public void doAnimation(Animation animation) {
+		animator.doAnimation(animation);
+	}
+	
+	/**
+	 * Updates the animator for this entity, basically updating the animated
+	 * pose of the entity. Must be called every frame.
+	 */
+	public void update() {
+		animator.update();
+	}
 
 	/**
-	 * @return The VAO containing all the mesh data for this entity.
+	 * Gets an array of the all important model-space transforms of all the
+	 * joints (with the current animation pose applied) in the entity. The
+	 * joints are ordered in the array based on their joint index. The position
+	 * of each joint's transform in the array is equal to the joint's index.
+	 * 
+	 * @return The array of model-space transforms of the joints in the current
+	 *         animation pose.
 	 */
-//	public Vao getModel() {
-//		return model;
-//	}
-//
-//	/**
-//	 * @return The diffuse texture for this entity.
-//	 */
-//	public Texture getTexture() {
-//		return texture;
-//	}
+	public Matrix4f[] getJointTransforms() {
+		Matrix4f[] jointMatrices = new Matrix4f[jointCount];
+		addJointsToArray(rootJoint, jointMatrices);
+		return jointMatrices;
+	}
+
+	/**
+	 * This adds the current model-space transform of a joint (and all of its
+	 * descendants) into an array of transforms. The joint's transform is added
+	 * into the array at the position equal to the joint's index.
+	 * 
+	 * @param headJoint
+	 *            - the current joint being added to the array. This method also
+	 *            adds the transforms of all the descendents of this joint too.
+	 * @param jointMatrices
+	 *            - the array of joint transforms that is being filled.
+	 */
+	private void addJointsToArray(Joint headJoint, Matrix4f[] jointMatrices) {
+		jointMatrices[headJoint.index] = headJoint.getAnimatedTransform();
+		for (Joint childJoint : headJoint.children) {
+			addJointsToArray(childJoint, jointMatrices);
+		}
+	}
 	
-	// ADDED
+	// Getters and setters
 	
 	public RawModel getRawModel() {
 		return rawModel;
@@ -184,66 +228,8 @@ public class AnimatedModel {
 		return terrain;
 	}
 
-	/**
-	 * Deletes the OpenGL objects associated with this entity, namely the model
-	 * (VAO) and texture.
-	 */
-	public void delete() {
-//		model.delete();
-//		texture.delete();
-	}
+	
 
-	/**
-	 * Instructs this entity to carry out a given animation. To do this it
-	 * basically sets the chosen animation as the current animation in the
-	 * {@link Animator} object.
-	 * 
-	 * @param animation
-	 *            - the animation to be carried out.
-	 */
-	public void doAnimation(Animation animation) {
-		animator.doAnimation(animation);
-	}
-
-	/**
-	 * Updates the animator for this entity, basically updating the animated
-	 * pose of the entity. Must be called every frame.
-	 */
-	public void update() {
-		animator.update();
-	}
-
-	/**
-	 * Gets an array of the all important model-space transforms of all the
-	 * joints (with the current animation pose applied) in the entity. The
-	 * joints are ordered in the array based on their joint index. The position
-	 * of each joint's transform in the array is equal to the joint's index.
-	 * 
-	 * @return The array of model-space transforms of the joints in the current
-	 *         animation pose.
-	 */
-	public Matrix4f[] getJointTransforms() {
-		Matrix4f[] jointMatrices = new Matrix4f[jointCount];
-		addJointsToArray(rootJoint, jointMatrices);
-		return jointMatrices;
-	}
-
-	/**
-	 * This adds the current model-space transform of a joint (and all of its
-	 * descendants) into an array of transforms. The joint's transform is added
-	 * into the array at the position equal to the joint's index.
-	 * 
-	 * @param headJoint
-	 *            - the current joint being added to the array. This method also
-	 *            adds the transforms of all the descendents of this joint too.
-	 * @param jointMatrices
-	 *            - the array of joint transforms that is being filled.
-	 */
-	private void addJointsToArray(Joint headJoint, Matrix4f[] jointMatrices) {
-		jointMatrices[headJoint.index] = headJoint.getAnimatedTransform();
-		for (Joint childJoint : headJoint.children) {
-			addJointsToArray(childJoint, jointMatrices);
-		}
-	}
+	
 
 }

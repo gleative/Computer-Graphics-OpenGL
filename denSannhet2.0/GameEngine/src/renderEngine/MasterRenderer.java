@@ -113,7 +113,6 @@ public class MasterRenderer {
 		animatedModelShader.loadSkyColor(RED, GREEN, BLUE);
 		animatedModelShader.loadLights(lights);
 		animatedModelShader.loadViewMatrix(camera);
-//		animatedModelShader.loadJointTransforms(animatedPlayer.getJointTransforms()); // We load the joint transforms in the AnimatedModelRenderer
 		animatedModelRenderer.render(animatedPlayer);
 		animatedModelShader.stop();
 		
@@ -161,7 +160,7 @@ public class MasterRenderer {
 	 */
 	public void cleanUp() {
 		shader.cleanUp();
-		animatedModelShader.cleanUp(); // ADDED
+		animatedModelShader.cleanUp();
 		terrainShader.cleanUp();
 	}
 	

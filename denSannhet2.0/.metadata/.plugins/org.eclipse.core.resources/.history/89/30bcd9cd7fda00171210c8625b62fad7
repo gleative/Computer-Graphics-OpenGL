@@ -1,0 +1,107 @@
+package animation;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+
+import animation.AnimatedModel;
+import animation.Joint;
+import colladaParser.ColladaLoader;
+import colladaParser.AnimatedModelData;
+import colladaParser.AnimationData;
+import colladaParser.JointData;
+import colladaParser.JointTransformData;
+import colladaParser.KeyFrameData;
+import colladaParser.MeshData;
+import colladaParser.SkeletonData;
+import engineTester.GeneralSettings;
+import renderEngine.Loader;
+import textures.ModelTexture;
+import engineTester.MyFile;
+import models.RawModel;
+import models.TexturedModel;
+
+public class AnimatedModelLoader {
+	
+	private TexturedModel model;
+	private int jointCount = 0;
+	private Joint rootJoint = new Joint(jointCount, null, null);
+	
+
+	/**
+	 * Creates an AnimatedEntity from the data in an entity file. It loads up
+	 * the collada model data, stores the extracted data in a VAO, sets up the
+	 * joint heirarchy, and loads up the entity's texture.
+	 * @param modelFile
+	 * @param textureFile
+	 * @param position
+	 * @param rotX
+	 * @param rotY
+	 * @param rotZ
+	 * @param scale
+	 * @param loader
+	 * @return
+	 */
+	public static AnimatedModel loadAnimatedModel(String modelFile, String textureFile, Vector3f position, float rotX, float rotY, float rotZ, float scale, Loader loader) {
+		MyFile modelfile = new MyFile("res", modelFile +".dae");
+		MyFile texturefile = new MyFile("res", textureFile + ".png");
+		
+		AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelfile, GeneralSettings.MAX_WEIGHTS);
+		MeshData modelMesh = entityData.getMeshData();
+		RawModel model = loader.loadToVAO(modelMesh.getVertices(), modelMesh.getTextureCoords(), modelMesh.getNormals(), modelMesh.getIndices(), modelMesh.getJointIds(), modelMesh.getVertexWeights());
+		ModelTexture texture = new ModelTexture(loader.loadTexture(textureFile)); // Set texture
+		SkeletonData skeletonData = entityData.getJointsData();
+		Joint headJoint = createJoints(skeletonData.headJoint);
+		return new AnimatedModel(model, texture, headJoint, skeletonData.jointCount, position, rotX, rotY, rotZ, scale);
+	}
+	
+	// ADDED
+	public Animation loadAnimation(String file) {
+		MyFile colladaFile = new MyFile(new MyFile("res"), file + ".dae");
+		
+		AnimationData animationData = ColladaLoader.loadColladaAnimation(colladaFile);
+		KeyFrame[] frames = new KeyFrame[animationData.keyFrames.length];
+		for (int i = 0; i < frames.length; i++) {
+			frames[i] = createKeyFrame(animationData.keyFrames[i]);
+		}
+		return new Animation(animationData.lengthSeconds, frames);
+	}
+	
+	// ADDED
+	private static KeyFrame createKeyFrame(KeyFrameData data) {
+		Map<String, JointTransform> map = new HashMap<String, JointTransform>();
+		for (JointTransformData jointData : data.jointTransforms) {
+			JointTransform jointTransform = createTransform(jointData);
+			map.put(jointData.jointNameId, jointTransform);
+		}
+		return new KeyFrame(data.time, map);
+	}
+	
+	
+	// ADDED
+	private static JointTransform createTransform(JointTransformData data) {
+		Matrix4f mat = data.jointLocalTransform;
+		Vector3f translation = new Vector3f(mat.m30, mat.m31, mat.m32);
+		Quaternion rotation = Quaternion.fromMatrix(mat);
+		return new JointTransform(translation, rotation);
+	}
+	
+	/**
+	 * Constructs the joint-hierarchy skeleton from the data extracted from the
+	 * collada file.
+	 * 
+	 * @param data
+	 *            - the joints data from the collada file for the head joint.
+	 * @return The created joint, with all its descendants added.
+	 */
+	private static Joint createJoints(JointData data) {
+		Joint joint = new Joint(data.index, data.nameId, data.bindLocalTransform);
+		for (JointData child : data.children) {
+			joint.addChild(createJoints(child));
+		}
+		return joint;
+	}
+
+}
