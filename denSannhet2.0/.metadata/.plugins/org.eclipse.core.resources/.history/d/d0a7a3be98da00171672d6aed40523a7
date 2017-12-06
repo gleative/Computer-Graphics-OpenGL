@@ -99,19 +99,6 @@ public class AnimatedPlayer extends AnimatedModel {
 	}
 	
 	/**
-	 * Rotates the camera along with the animated model. Thought just calling the super would
-	 * rotate the animated model aswell. But it only rotated the camera. 
-	 * By also rotating the model, they both rotate correctly when the user sends inputs
-	 * @param player
-	 */
-	private void rotateAnimatedPlayer(AnimatedModel player) {
-		float turnSpeed = currentTurnSpeed * DisplayManager.getFrameTimeSeconds();
-		
-		super.increaseRotation(0, turnSpeed, 0);
-		player.increaseRotation(0, turnSpeed, 0);
-	}
-	
-	/**
 	 * Tells the superclass to animated the model to do animation
 	 */
 	public void doAnimation(Animation animation) {

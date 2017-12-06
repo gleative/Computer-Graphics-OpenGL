@@ -38,8 +38,8 @@ public class AnimatedPlayer extends AnimatedModel {
 	}
 	
 	public void move(Terrain terrain, AnimatedModel model) {
-		checkInputs();
-		rotateAnimatedPlayer(model);
+		checkInputs(model);
+		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
@@ -73,7 +73,7 @@ public class AnimatedPlayer extends AnimatedModel {
 	/**
 	 * Checks the inputs and moves the entity dependent of what the user inputs
 	 */
-	private void checkInputs() {
+	private void checkInputs(AnimatedModel model) {
 		if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			this.currentSpeed = RUN_SPEED;
 			setAnimation(runAnimation);
@@ -85,6 +85,7 @@ public class AnimatedPlayer extends AnimatedModel {
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			this.currentTurnSpeed = -TURN_SPEED;
+			model.increaseRotation(0, 1, 0);
 		}else if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			this.currentTurnSpeed = TURN_SPEED;
 		}else {
@@ -96,19 +97,6 @@ public class AnimatedPlayer extends AnimatedModel {
 		if(Keyboard.isKeyDown(Keyboard.KEY_W) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			this.currentSpeed = RUN_SPEED * 10;
 		}
-	}
-	
-	/**
-	 * Rotates the camera along with the animated model. Thought just calling the super would
-	 * rotate the animated model aswell. But it only rotated the camera. 
-	 * By also rotating the model, they both rotate correctly when the user sends inputs
-	 * @param player
-	 */
-	private void rotateAnimatedPlayer(AnimatedModel player) {
-		float turnSpeed = currentTurnSpeed * DisplayManager.getFrameTimeSeconds();
-		
-		super.increaseRotation(0, turnSpeed, 0);
-		player.increaseRotation(0, turnSpeed, 0);
 	}
 	
 	/**

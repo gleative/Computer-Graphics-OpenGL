@@ -105,10 +105,10 @@ public class AnimatedPlayer extends AnimatedModel {
 	 * @param player
 	 */
 	private void rotateAnimatedPlayer(AnimatedModel player) {
-		float turnSpeed = currentTurnSpeed * DisplayManager.getFrameTimeSeconds();
+		private float final turnSpeed = currentTurnSpeed * DisplayManager.getFrameTimeSeconds();
 		
-		super.increaseRotation(0, turnSpeed, 0);
-		player.increaseRotation(0, turnSpeed, 0);
+		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
+		player.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 	}
 	
 	/**

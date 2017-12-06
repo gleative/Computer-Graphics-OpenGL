@@ -113,7 +113,7 @@ public class MainGameLoop {
 	// Animation
 			AnimatedModelLoader animatedLoader = new AnimatedModelLoader();
 			
-			AnimatedModel animatedEntity = animatedLoader.loadAnimatedModel("model", "diffuse", new Vector3f(200, -4, 300), 0, 90, 0, 1, loader);
+			AnimatedModel animatedEntity = animatedLoader.loadAnimatedModel("model", "image", new Vector3f(200, -4, 300), 0, 90, 0, 1, loader);
 			
 			Animation runAnimation = animatedLoader.loadAnimation("model");
 			Animation standingAnimation = animatedLoader.loadAnimation("standing");
