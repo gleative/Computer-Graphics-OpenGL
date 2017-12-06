@@ -1,7 +1,7 @@
 #version 400 core
 
-const int MAX_JOINTS = 50;//max joints allowed in a skeleton
-const int MAX_WEIGHTS = 3;//max number of joints that can affect a vertex
+const int MAX_JOINTS = 50;// Max amount of joints allowed in a skeleton
+const int MAX_WEIGHTS = 3;// Max amount of joints that the vertex can be affected by
 
 in vec3 position;
 in vec2 textureCoords;
@@ -11,8 +11,8 @@ in vec3 weights;
 
 out vec2 pass_textureCoords;
 out vec3 surfaceNormal;
-out vec3 toLightVector[10];
-out vec3 toCameraVector;
+out vec3 toLightVector[10]; // The vector pointing towards the light source
+out vec3 toCameraVector; // The vector that goes to the camera
 out float visibility;
 
 uniform mat4 jointTransforms[MAX_JOINTS];
@@ -20,7 +20,7 @@ uniform mat4 jointTransforms[MAX_JOINTS];
 uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
-uniform vec3 lightPosition[10];
+uniform vec3 lightPosition[10]; // Holds the position of the light
 
 uniform float numberOfRows;
 uniform vec2 offset;
@@ -53,7 +53,7 @@ void main(void){
 		toLightVector[i] = lightPosition[i] - worldPosition.xyz;
 	}
 	
-	toCameraVector = (inverse (viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
+	toCameraVector = (inverse (viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz; // Calculates the specular lighting
 	float distance = length(positionRelativeToCam.xyz);
 	visibility = exp(-pow((distance*density),gradient));
 	visibility = clamp(visibility,0.0,1.0);

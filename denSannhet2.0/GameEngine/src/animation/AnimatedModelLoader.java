@@ -45,9 +45,9 @@ public class AnimatedModelLoader {
 	 * @param loader
 	 * @return
 	 */
-	public static AnimatedModel loadAnimatedModel(String modelFile, String textureFile, Vector3f position, float rotX, float rotY, float rotZ, float scale, Loader loader) {
+	public AnimatedModel loadAnimatedModel(String modelFile, String textureFile, Vector3f position, float rotX, float rotY, float rotZ, float scale, Loader loader) {
 		MyFile modelfile = new MyFile("res", modelFile +".dae");
-		MyFile texturefile = new MyFile("res", textureFile + ".png");
+//		MyFile texturefile = new MyFile("res", textureFile + ".png");
 		
 		AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelfile, GeneralSettings.MAX_WEIGHTS);
 		MeshData modelMesh = entityData.getMeshData();
@@ -55,12 +55,13 @@ public class AnimatedModelLoader {
 		ModelTexture texture = new ModelTexture(loader.loadTexture(textureFile)); // Set texture
 		SkeletonData skeletonData = entityData.getJointsData();
 		Joint headJoint = createJoints(skeletonData.headJoint);
-		return new AnimatedModel(model, texture, headJoint, skeletonData.jointCount, position, rotX, rotY, rotZ, scale);
+		AnimatedModel animatedModel = new AnimatedModel(model, texture, headJoint, skeletonData.jointCount, position, rotX, rotY, rotZ, scale);
+		return animatedModel;
 	}
 	
 	/**
-	 * Loads up the animation, by finding the keyframes in the collada file.
-	 * Creates the key frames, and initializes a new animation
+	 * Loads up the animation. Finds the keyframes in the collada file, 
+	 * creates the key frames, and initializes a new animation
 	 * @param file
 	 * @return
 	 */
@@ -75,7 +76,14 @@ public class AnimatedModelLoader {
 		return new Animation(animationData.lengthSeconds, frames);
 	}
 	
-	// ADDED
+	/**
+	 * Creates a keyframe from the data extracted from the collada file.
+	 * 
+	 * @param data
+	 *            - the data about the keyframe that was extracted from the
+	 *            collada file.
+	 * @return The keyframe.
+	 */
 	private static KeyFrame createKeyFrame(KeyFrameData data) {
 		Map<String, JointTransform> map = new HashMap<String, JointTransform>();
 		for (JointTransformData jointData : data.jointTransforms) {
@@ -86,17 +94,23 @@ public class AnimatedModelLoader {
 	}
 	
 	
-	// ADDED
+	/**
+	 * Creates a joint transform from the data extracted from the collada file.
+	 * 
+	 * @param data
+	 *            - the data from the collada file.
+	 * @return The joint transform.
+	 */
 	private static JointTransform createTransform(JointTransformData data) {
-		Matrix4f mat = data.jointLocalTransform;
-		Vector3f translation = new Vector3f(mat.m30, mat.m31, mat.m32);
-		Quaternion rotation = Quaternion.fromMatrix(mat);
+		Matrix4f matrix = data.jointLocalTransform;
+		Quaternion rotation = Quaternion.fromMatrix(matrix);
+		Vector3f translation = new Vector3f(matrix.m30, matrix.m31, matrix.m32);
 		return new JointTransform(translation, rotation);
 	}
 	
 	/**
-	 * Constructs the joint-hierarchy skeleton from the data extracted from the
-	 * collada file.
+	 * Organizes the hierarchy of the joint skeleton, 
+	 * from the data received fromt the collada file
 	 * 
 	 * @param data
 	 *            - the joints data from the collada file for the head joint.

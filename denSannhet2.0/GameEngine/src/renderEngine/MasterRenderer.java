@@ -134,7 +134,7 @@ public class MasterRenderer {
 	}
 	
 	/**
-	 * sort and put in entities for the HashMap
+	 * Sort and put in entities for the HashMap
 	 */
 	public void processEntity(Entity entity) {
 		// identifying the model
@@ -149,10 +149,6 @@ public class MasterRenderer {
 			entities.put(entityModel, newBatch);
 		}
 		
-	}
-	
-	public void processAnimatedEntity(AnimatedModel entity) {
-		animatedModelRenderer.render(entity);
 	}
 	
 	/**

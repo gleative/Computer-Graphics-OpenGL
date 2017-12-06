@@ -38,7 +38,6 @@ public class AnimatedModelRenderer {
 	 * of the VAO before we render the animated entity. This is because 
 	 * we need to have the indices and weights
 	 * @param entity
-	 *            - the animated entity to be rendered.
 	 */
 	public void render(AnimatedModel entity) {
 		prepareTexturedModel(entity);
