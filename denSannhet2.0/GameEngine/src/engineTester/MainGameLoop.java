@@ -47,7 +47,7 @@ public class MainGameLoop {
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();		
 	
 		// the sun
-		lights.add(new Light(new Vector3f(0, 10000, -7000), new Vector3f(0.001f, 0.001f, 0.001f)));
+		lights.add(new Light(new Vector3f(0, 10000, -7000), new Vector3f(1.001f, 1.001f, 1.001f)));
 	
 	// Player
 		TexturedModel personModel = loadTexturedModel("models/person/person", "models/person/playerTexture", 1, loader);		

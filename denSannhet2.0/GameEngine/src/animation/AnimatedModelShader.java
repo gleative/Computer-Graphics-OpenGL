@@ -1,9 +1,5 @@
 package animation;
 
-import shaders.UniformMat4Array;
-import shaders.UniformMatrix;
-import shaders.UniformSampler;
-import shaders.UniformVec3;
 import shaders.shaderProgram;
 import toolbox.Maths;
 
@@ -12,15 +8,12 @@ import java.util.List;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 
-import engineTester.MyFile;
 import entities.Camera;
 import entities.Light;
 
 public class AnimatedModelShader extends shaderProgram {
 	
-	// ADDED
 	private int location_transformationMatrix;
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
@@ -34,25 +27,14 @@ public class AnimatedModelShader extends shaderProgram {
 	private int location_numberOfRows;
 	private int location_offset;
 	private int location_jointTransforms[]; 
-//	private int location_clipPlane;
 	
 	private static final int MAX_LIGHTS = 10;
 
-	private static final int MAX_JOINTS = 50;// max number of joints in a skeleton
+	private static final int MAX_JOINTS = 50;
 	private static final int DIFFUSE_TEX_UNIT = 0;
-
-//	private static final MyFile VERTEX_SHADER = new MyFile("animation", "animatedEntityVertex.txt");
-//	private static final MyFile FRAGMENT_SHADER = new MyFile("animation", "animatedEntityFragment.txt");
 	
 	private static final String VERTEX_SHADER = "src/animation/animatedEntityVertex.txt";
 	private static final String FRAGMENT_SHADER = "src/animation/animatedEntityFragment.txt";
-	
-	// ADDED
-
-//	protected UniformMatrix projectionViewMatrix = new UniformMatrix("projectionViewMatrix");
-//	protected UniformVec3 lightDirection = new UniformVec3("lightDirection");
-//	protected UniformMat4Array jointTransforms = new UniformMat4Array("jointTransforms", MAX_JOINTS);
-//	private UniformSampler diffuseMap = new UniformSampler("diffuseMap");
 
 	/**
 	 * Creates the shader program for the {@link AnimatedModelRenderer} by
@@ -60,14 +42,11 @@ public class AnimatedModelShader extends shaderProgram {
 	 * location of all the specified uniform variables, and also indicates that
 	 * the diffuse texture will be sampled from texture unit 0.
 	 */
-//	public AnimatedModelShader() {
-//		super(VERTEX_SHADER, FRAGMENT_SHADER, "in_position", "in_textureCoords", "in_normal", "in_jointIndices",
-//				"in_weights");
-//		super.storeAllUniformLocations(projectionViewMatrix, diffuseMap, lightDirection, jointTransforms);
-//		connectTextureUnits();
-//	}
 	
-	// ADDED
+	/**
+	 * Creates a shader program for the AnimatedModelRenderer and 
+	 * sends the vertex and fragment shader path to the shaderProgram
+	 */
 	public AnimatedModelShader() {
 		super(VERTEX_SHADER, FRAGMENT_SHADER);
 	}
@@ -88,11 +67,9 @@ public class AnimatedModelShader extends shaderProgram {
 		location_viewMatrix = super.getUniformLocation("viewMatrix");
 		location_shineDamper = super.getUniformLocation("shineDamper");
 		location_reflectivity = super.getUniformLocation("reflectivity");
-//		location_useFakeLighting = super.getUniformLocation("useFakeLighting");
 		location_skyColour = super.getUniformLocation("skyColour");
 		location_numberOfRows = super.getUniformLocation("numberOfRows");
 		location_offset = super.getUniformLocation("offset");
-//		location_clipPlane = super.getUniformLocation("clipPlane");
 		
 		location_lightPosition = new int[MAX_LIGHTS];
 		location_lightColour = new int[MAX_LIGHTS];
@@ -110,12 +87,6 @@ public class AnimatedModelShader extends shaderProgram {
 		
 		
 	}
-	
-	
-	
-//	public void loadCLipPlane(Vector4f plane) {
-//		super.load4DVector(location_clipPlane, plane);
-//	}
 	
 	public void loadShineVariables(float damper, float refectivity) {
 		super.loadFloat(location_shineDamper, damper);
@@ -174,14 +145,5 @@ public class AnimatedModelShader extends shaderProgram {
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
 	}
-
-	/**
-	 * Indicates which texture unit the diffuse texture should be sampled from.
-	 */
-//	private void connectTextureUnits() {
-//		super.start();
-//		diffuseMap.loadTexUnit(DIFFUSE_TEX_UNIT);
-//		super.stop();
-//	}
 
 }

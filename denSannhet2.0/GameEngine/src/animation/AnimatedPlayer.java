@@ -28,7 +28,7 @@ public class AnimatedPlayer extends AnimatedModel {
 	private Animation standingAnimation;
 	
 	/**
-	 * Constructor for Animated Entity
+	 * Constructor for Animated Player
 	 * @param model
 	 * @param run
 	 */
@@ -99,9 +99,9 @@ public class AnimatedPlayer extends AnimatedModel {
 	}
 	
 	/**
-	 * Rotates the camera along with the animated model. Thought just calling the super would
-	 * rotate the animated model aswell. But it only rotated the camera. 
-	 * By also rotating the model, they both rotate correctly when the user sends inputs
+	 * Rotates the camera along with the animated model. Was thinking that only calling the to 
+	 * super class would rotate the animated model aswell. But it only rotated the camera. 
+	 * So have to rotate the model aswell. And now they both rotate correctly when the user sends inputs
 	 * @param player
 	 */
 	private void rotateAnimatedPlayer(AnimatedModel player) {

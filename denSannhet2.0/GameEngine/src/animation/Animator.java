@@ -54,8 +54,8 @@ public class Animator {
 	 *            - the new animation to carry out.
 	 */
 	public void doAnimation(Animation animation) {
-		this.animationTime = 0;
 		this.currentAnimation = animation;
+		this.animationTime = 0;
 	}
 
 	/**
@@ -66,12 +66,13 @@ public class Animator {
 	 * joints by setting the joint transforms.
 	 */
 	public void update() {
-		if (currentAnimation == null) {
-			return;
+		// If there is an animation, update it
+		if (currentAnimation != null) {
+			increaseAnimationTime();
+			Map<String, Matrix4f> currentPose = calculateCurrentAnimationPose();
+			applyPoseToJoints(currentPose, entity.getRootJoint(), new Matrix4f());
 		}
-		increaseAnimationTime();
-		Map<String, Matrix4f> currentPose = calculateCurrentAnimationPose();
-		applyPoseToJoints(currentPose, entity.getRootJoint(), new Matrix4f());
+		
 	}
 
 	/**
