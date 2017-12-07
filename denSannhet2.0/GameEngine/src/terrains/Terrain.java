@@ -17,24 +17,58 @@ import toolbox.Maths;
 
 
 /**
- * Basically a terrain is a entity. So not a lot different
+ * TODO: Rewrite this section...
+ * Terrain is a layout of vertices that we generate in code, 
+ * to avoid modeling it in another software then import into the engine.
+ * Terrain consist of regular grid with vertices, 
+ * where vertices will be spaced out equally both horizontal axis meaning both x and z(depth and horizon).
+ * Because of this the Terrain will have a square shape. 
+ * We will then give each vertex a individual height based on the color of a BlendMap(image with 4 different colours) 
+ * by using getHeight() that returns the height of the BufferedImage. This information will we fill into a matrix,
+ * and upon deciding the height
  * @author Håkon S. Bøckman
  *
  */
 public class Terrain {
-	
+	// Size is the size of the terrain
 	private static final float SIZE = 800;
+	
+	// The height differences between the lowest point on the terrain and the highest point possible to achieve.
 	private static final float MAX_HEIGHT = 40;
+	
+	// 24 bit RGB ? max value of 256^3 
 	private static final float MAX_PIXEL_COLOUR = 256 * 256 * 256;
 	
+	// Terrain own X value.
 	private float x;
+								// since it is a Terrain, we are not interested in the Y value, because its always 0 - flat
+	// Terrain own Z value.
 	private float z;
+	
+	// The model of the terrain with heightMap implemented for high and lows.
 	private RawModel model;
+	
+	// A class that holds onto more then one texture, we get the different textures from the class based on what 
+	// kind of colours we find on the image (blendMap).
 	private TerrainTexturePack texturePack;
+	
+	// Basicly a image consisting of different colours, each colours represent a different texture.
 	private TerrainTexture blendMap;
 	
+	/**
+	 * Matrix that hold onto the difference in height based on the RGB values of HeightMap image we use when creating a Terrain.
+	 */
 	private float [][] heights;
 	
+	/**
+	 * Constructor of terrain.
+	 * @param gridX
+	 * @param gridZ
+	 * @param loader
+	 * @param texturePack
+	 * @param blendMap
+	 * @param heightMap
+	 */
 	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap, String heightMap) {
 		this.texturePack = texturePack;
 		this.blendMap = blendMap;

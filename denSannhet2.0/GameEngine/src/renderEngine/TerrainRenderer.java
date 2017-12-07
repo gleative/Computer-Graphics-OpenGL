@@ -30,6 +30,10 @@ public class TerrainRenderer {
 		shader.stop();
 	}
 	
+	/**
+	 *  Loop through all the terrains then prepare it, render it and then unbind it
+	 * @param terrains
+	 */
 	public void render(List<Terrain> terrains) {
 		for(Terrain terrain:terrains) {
 			prepareTerrain(terrain);
@@ -58,6 +62,11 @@ public class TerrainRenderer {
 		shader.loadShineVariables(1, 0);
 	}
 	
+	/**
+	 *  Binding the 4 textures that consist within the texturePack class, 
+	 *  then binding the blendMap of the current terrain.
+	 * @param terrain
+	 */
 	private void bindTextures(Terrain terrain) {
 		TerrainTexturePack texturePack = terrain.getTexturePack();
 		// background Texture
@@ -77,6 +86,9 @@ public class TerrainRenderer {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendMap().getTextureID());
 	}
 	
+	/*
+	 * Un-bind all the texture related to the terrain
+	 */
 	private void unbindTexturedModel() {
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);

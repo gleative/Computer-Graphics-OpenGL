@@ -69,6 +69,10 @@ public class MasterRenderer {
 	 */
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 	
+	/**
+	 *  By calling this constructor we automatically also call our specialized render classes constructors
+	 *  We also enables the culling of models and creates the projection matrix of the world
+	 */
 	public MasterRenderer() {
 		enableCulling();
 		createProjectionMatrix();
@@ -80,7 +84,8 @@ public class MasterRenderer {
 	}
 	
 	/**
-	 * preventing rendering the back side of a model, when we are facing the front side of it
+	 * Enabling Culling of models.
+	 * This method stops rendering the back side of a model, when we are facing the front side of it
 	 * Why render something you can't see?
 	 */
 	public static void enableCulling() {
@@ -88,6 +93,9 @@ public class MasterRenderer {
 		GL11.glCullFace(GL11.GL_BACK);
 	}
 	
+	/**
+	 *  Disable Culling of models
+	 */
 	public static void disableCulling() {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 	}
@@ -95,10 +103,16 @@ public class MasterRenderer {
 	
 	/**
 	 * Now we have prevented calling the renderer once every frame per model, but instead we call the renderer once for every different model
-	 * for every frame. so 100 similar models will only call the rendere 
+	 * for every frame. so 100 similar models will only call the render once per frame and not 100 x frames. We pass this hashMap into the shader.render 
+	 * there will the method will loop through the list and create texture models accordingly to the keys found within the hashMap.
 	 * 
-	 * @param sun
-	 * @param camera
+	 * This function will call all the methods related to rendering, first it will clear all the buffers. then call the respective shaders and
+	 * methods to render the models correctly. The entities. or in this world the trees, plants, grass, flowers are first rendered. then the animatedPlayer
+	 * is rendered. And last the terrain is rendered.
+	 * 
+	 * @param lights - list of lights in this world
+	 * @param camera - the camera of the viewer of this world
+	 * @param animatedPlayer - the player controlled by the viewer.
 	 */
 	public void render(List<Light> lights, Camera camera, AnimatedModel animatedPlayer) {
 		prepare();
@@ -129,6 +143,11 @@ public class MasterRenderer {
 		
 	}
 	
+	/**
+	 *  Add terrains to the local list, this list will be looped through in the method
+	 *  terrainShader.render and handled properly there.
+	 * @param terrain
+	 */
 	public void processTerrain(Terrain terrain) {
 		terrains.add(terrain);
 	}
@@ -170,6 +189,11 @@ public class MasterRenderer {
 		GL11.glClearColor(RED, GREEN, BLUE, 1);
 	}
 	
+	/**
+	 * Creates the "box" we view the world in, and determines how far, wide and high we can see.
+	 * the aspect ratio will be determined by the screen size, and the length and wideness of the 
+	 * world we see at same time will be determined by 
+	 */
 	private void createProjectionMatrix() {
 		float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
 		float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
