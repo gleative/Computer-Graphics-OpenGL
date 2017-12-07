@@ -35,9 +35,9 @@ public class Joint {
 
 	public final int index;// ID
 	public final String name;
-	public final List<Joint> children = new ArrayList<Joint>();
+	public final List<Joint> children = new ArrayList<Joint>(); // List of all the children
 
-	private Matrix4f animatedTransform = new Matrix4f();
+	private Matrix4f animatedTransform = new Matrix4f(); // The current position and rotation of the joint, so changing this will make us able to set our model in different poses
 	
 	private final Matrix4f localBindTransform;
 	private Matrix4f inverseBindTransform = new Matrix4f();

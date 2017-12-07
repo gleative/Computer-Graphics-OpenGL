@@ -30,6 +30,8 @@ public class KeyFrame {
 	 *            - the local-space transforms for all the joints at this
 	 *            keyframe, indexed by the name of the joint that they should be
 	 *            applied to.
+	 *            
+	 * Holds the current pose at the given time of the animation
 	 */
 	public KeyFrame(float timeStamp, Map<String, JointTransform> jointKeyFrames) {
 		this.timeStamp = timeStamp;

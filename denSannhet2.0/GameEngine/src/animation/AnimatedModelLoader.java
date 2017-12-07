@@ -47,7 +47,6 @@ public class AnimatedModelLoader {
 	 */
 	public AnimatedModel loadAnimatedModel(String modelFile, String textureFile, Vector3f position, float rotX, float rotY, float rotZ, float scale, Loader loader) {
 		MyFile modelfile = new MyFile("res", modelFile +".dae");
-//		MyFile texturefile = new MyFile("res", textureFile + ".png");
 		
 		AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelfile, GeneralSettings.MAX_WEIGHTS);
 		MeshData modelMesh = entityData.getMeshData();

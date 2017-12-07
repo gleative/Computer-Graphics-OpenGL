@@ -18,7 +18,7 @@ uniform vec3 lightPosition[10];
 uniform float numberOfRows;
 uniform vec2 offset;
 
-const float density = 0.00035;
+const float density = 0.0035;
 const float gradient = 5.00;
 
 void main(void){
