@@ -8,10 +8,16 @@ out vec2 pass_textureCoords;
 out vec3 surfaceNormal;
 out vec3 toLightVector[10];
 out vec3 toCameraVector;
+
+//the value that decides how much this entity is blended with the sky colour aka making it appears having fog on it.
 out float visibility;
 
 uniform mat4 transformationMatrix;
+
+// This matrix determines how far the camra can view, how wide and make sure a square that are really big upclose
+// will apear smaller in the distance.
 uniform mat4 projectionMatrix;
+
 uniform mat4 viewMatrix;
 uniform vec3 lightPosition[10];
 
@@ -20,18 +26,23 @@ uniform float useFakeLighting;
 uniform float numberOfRows;
 uniform vec2 offset;
 
-// the larger the number, the harder is the edge in the gradient.
-// Determines the gradient of the fog on entities in the world.
-
-const float density = 0.0035;
 // Determines the density of the Fog on entities in the world
+// We could say this determines the thickness of the fog
+const float density = 0.0035;
+
+// the larger the number, the harder is the edge in the gradient.
+// Determines the area affected of the fog, the higher the value is
+// the smaller is the area effected with the gradient, and resulting in 
+// making the transition have a "hard" edge instead of fading.
 const float gradient = 5.00;
 
 void main(void){
 	
 	
 	vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
+	
 	vec4 positionRelativeToCam = viewMatrix * worldPosition; 
+	
 	gl_Position = projectionMatrix * positionRelativeToCam;
 	pass_textureCoords = (textureCoords / numberOfRows) + offset;
 	
@@ -53,8 +64,11 @@ void main(void){
 	}
 	
 	toCameraVector = (inverse (viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
+	
 	float distance = length(positionRelativeToCam.xyz);
+	
 	visibility = exp(-pow((distance*density),gradient));
+	
 	visibility = clamp(visibility,0.0,1.0);
 	
 	

@@ -137,7 +137,9 @@ public class MainGameLoop {
 			
 			// Render with animation
 			renderer.render(lights, cameraOnAnimatedPlayer, animatedEntity);
-			cameraOnAnimatedPlayer.Move();
+			
+			collisionCameraTerrain(cameraOnAnimatedPlayer, terrains);
+//			cameraOnAnimatedPlayer.Move();
 //			renderer.render(lights, cameraOnAnimatedPlayer); // This made so it rendered
 //			renderer.processAnimatedEntity(animatedPlayer); // Accepts AnimatedPlayer type aswell, because it extends "AnimationModel"
 			animatedPlayer.update();
@@ -192,18 +194,18 @@ public class MainGameLoop {
 		}
 	}
 	
-	private static void collisionMultipleTerrains(Player player, List<Terrain> terrains) {
-		int px = (int) player.getPosition().x;
-		int pz = (int) player.getPosition().z;
+	private static void collisionCameraTerrain(Camera camera, List<Terrain> terrains) {
+		int px = (int) camera.getPosition().x;
+		int pz = (int) camera.getPosition().z;
 		
 		if( px <= 800 && px >= 0 && pz >= -800 && pz <= 0) {       // x: 0 to 800 and z: 0 to -800
-			player.move(terrains.get(0));
+			camera.Move(terrains.get(0));
 		}else if ( px >= -800 && px <= 0 && pz >= -800 && pz <= 0 ) {	// x: 0 to -800 and z: 0 to -800
-			player.move(terrains.get(1));
+			camera.Move(terrains.get(1));
 		}else if ( px >= -800 && px <= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to -800 and z: 0 to 800
-			player.move(terrains.get(2));
+			camera.Move(terrains.get(2));
 		}else if ( px <= 800 && px >= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to 800 and z: 0 to 800
-			player.move(terrains.get(3));
+			camera.Move(terrains.get(3));
 		}
 	}
 	

@@ -4,6 +4,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 import animation.AnimatedPlayer;
+import terrains.Terrain;
 
 public class Camera {
 	
@@ -28,9 +29,9 @@ public class Camera {
 	}
 	
 	
-	public void Move() {
+	public void Move(Terrain terrain) {
 		calculateZoom();
-		calculatePitch();
+		calculatePitch(terrain);
 		calculateAngleAroundPlayer();
 		float horizontalDistance = calculateHorizontalDistance();
 		float verticalDistance = calculateVerticalDistance();
@@ -91,11 +92,15 @@ public class Camera {
 		}
 	}
 	
-	private void calculatePitch() {
+	private void calculatePitch(Terrain terrain) {
 		if(Mouse.isButtonDown(1)) {
 			float pitchChange = Mouse.getDY() * 0.1f;
 			pitch  -= pitchChange;
 		}
+		if( pitch < (terrain.getHeightOfTerrain(terrain.getX(), terrain.getZ()) + 5.0f) ) {
+			pitch = terrain.getHeightOfTerrain(terrain.getX(), terrain.getZ()) + 5.0f ;
+		}
+		
 	}
 	
 	private void calculateAngleAroundPlayer() {
