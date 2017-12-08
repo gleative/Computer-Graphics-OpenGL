@@ -62,9 +62,6 @@ public class Quaternion {
 	 * 
 	 * More detailed explanation here:
 	 * http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/
-	 * 
-	 * @return The rotation matrix which represents the exact same rotation as
-	 *         this quaternion.
 	 */
 	public Matrix4f toRotationMatrix() {
 		Matrix4f matrix = new Matrix4f();
@@ -102,10 +99,6 @@ public class Quaternion {
 	 * 
 	 * More detailed explanation here:
 	 * http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
-	 * 
-	 * @param matrix
-	 *            - the transformation matrix containing the rotation which this
-	 *            quaternion shall represent.
 	 */
 	public static Quaternion fromMatrix(Matrix4f matrix) {
 		float w, x, y, z;

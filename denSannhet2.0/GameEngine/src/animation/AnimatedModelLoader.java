@@ -23,27 +23,13 @@ import engineTester.MyFile;
 import models.RawModel;
 import models.TexturedModel;
 
-public class AnimatedModelLoader {
-	
-//	private TexturedModel model;
-//	private int jointCount = 0;
-//	private Joint rootJoint = new Joint(jointCount, null, null);
-	
+public class AnimatedModelLoader {	
 
 	/**
 	 * Creates an AnimatedEntity from the data in an entity file. It loads up
 	 * the collada model data, stores the extracted data in a VAO, sets up the
 	 * joint heirarchy, and loads up the entity's texture.
 	 * 
-	 * @param modelFile
-	 * @param textureFile
-	 * @param position
-	 * @param rotX
-	 * @param rotY
-	 * @param rotZ
-	 * @param scale
-	 * @param loader
-	 * @return
 	 */
 	public AnimatedModel loadAnimatedModel(String modelFile, String textureFile, Vector3f position, float rotX, float rotY, float rotZ, float scale, Loader loader) {
 		MyFile modelfile = new MyFile("res", modelFile +".dae");

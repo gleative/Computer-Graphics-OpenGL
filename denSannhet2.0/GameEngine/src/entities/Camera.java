@@ -84,7 +84,7 @@ public class Camera {
 		float offsetZ = (float) (horizontalDistance * Math.cos(Math.toRadians(theta)));
 		position.x = animatedPlayer.getPosition().x - offsetX;
 		position.z = animatedPlayer.getPosition().z - offsetZ;
-		position.y = animatedPlayer.getPosition().y + verticalDistance + 6; // 5 is added, as the camera was pointing towards the legs, and we wanted it insted to point at the chest of the model
+		position.y = animatedPlayer.getPosition().y + verticalDistance + 6; // 6 is added, as the camera was pointing towards the legs, and we wanted it insted to point at the chest of the model
 	}
 	
 	private float calculateHorizontalDistance() {

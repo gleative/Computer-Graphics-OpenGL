@@ -52,6 +52,7 @@ public class AnimatedPlayer extends AnimatedModel {
 			upwardsSpeed = 0;
 			isInAir = false;
 			super.getPosition().y = terrainHeight;
+			setAnimation(runAnimation);
 		}
 	}
 	
@@ -59,6 +60,7 @@ public class AnimatedPlayer extends AnimatedModel {
 		if(!isInAir) {
 			this.upwardsSpeed = JUMP_POWER;
 			isInAir = true;
+			setAnimation(null); // Dont want to model to look like its running in the air. Would have applied a jumping animation here.
 		}
 	}
 	
@@ -76,7 +78,10 @@ public class AnimatedPlayer extends AnimatedModel {
 	private void checkInputs() {
 		if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			this.currentSpeed = RUN_SPEED;
-			setAnimation(runAnimation);
+			if(!isInAir) {
+				setAnimation(runAnimation);
+			}
+			
 		}else if(Keyboard.isKeyDown(Keyboard.KEY_S)) {
 			this.currentSpeed = -RUN_SPEED;
 		}else {

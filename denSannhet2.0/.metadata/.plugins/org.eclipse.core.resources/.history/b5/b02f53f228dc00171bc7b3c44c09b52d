@@ -1,0 +1,201 @@
+package animation;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.lwjgl.util.vector.Matrix4f;
+
+import animation.AnimatedModel;
+import animation.Joint;
+import renderEngine.DisplayManager;
+
+/**
+ * 
+ * This class contains all the functionality to apply an animation to an
+ * animated entity. An Animator instance is associated with just one
+ * {@link AnimatedModel}. It also keeps track of the running time (in seconds)
+ * of the current animation, along with a reference to the currently playing
+ * animation for the corresponding entity.
+ * 
+ * An Animator instance needs to be updated every frame, in order for it to keep
+ * updating the animation pose of the associated entity. The currently playing
+ * animation can be changed at any time using the doAnimation() method. The
+ * Animator will keep looping the current animation until a new animation is
+ * chosen.
+ * 
+ * The Animator calculates the desired current animation pose by interpolating
+ * between the previous and next keyframes of the animation (based on the
+ * current animation time). The Animator then updates the transforms all of the
+ * joints each frame to match the current desired animation pose.
+ * 
+ * 
+ * 
+ * 
+ * This class has the required methods to be able to apply a animation to a animated entity
+ * 
+ * @author Glenn Arne Christensen
+ *
+ */
+public class Animator {
+
+	// The animated model it is going to animate
+	private final AnimatedModel entity;
+
+	// The animation that is going to be applied to the model
+	private Animation currentAnimation;
+	
+	// Stores the time/progression it is in the animation
+	private float animationTime = 0;
+
+
+	public Animator(AnimatedModel entity) {
+		this.entity = entity;
+	}
+
+	/**
+	 * Starts the current animation from the start
+	 */
+	public void doAnimation(Animation animation) {
+		this.currentAnimation = animation;
+		this.animationTime = 0;
+	}
+
+	/**
+	 * This method should be called each frame to update the animation currently
+	 * being played. This increases the animation time (and loops it back to
+	 * zero if necessary), finds the pose that the entity should be in at that
+	 * time of the animation, and then applies that pose to all the model's
+	 * joints by setting the joint transforms.
+	 */
+	public void update() {
+		// If there is an animation, update it
+		if (currentAnimation != null) {
+			increaseAnimationTime();
+			Map<String, Matrix4f> currentPose = calculateCurrentAnimationPose(); // Calculates the pose that the model should be in
+			applyPoseToJoints(currentPose, entity.getRootJoint(), new Matrix4f()); // Applies the pose to the models joints
+		}
+		
+	}
+
+	/**
+	 * Increases the time of the animated that is current. If the animated time is
+	 * longer than the lenght of the animation, it will then start over again, so 
+	 * the animation loops.
+	 */
+	private void increaseAnimationTime() {
+		animationTime += DisplayManager.getFrameTimeSeconds();
+		if (animationTime > currentAnimation.getLength()) {
+			this.animationTime = 0; // Sets it back to zero, so the animation time is reset
+		}
+	}
+
+	/**     
+	 * Calculates the current pose of the animation, by finding the previous
+	 * and the next frames which are dependent of the time the animation is in.         
+	 * Then finds the progression by calculation where the timer is between
+	 * frame A and frame B. At the end it interpolates between the two poses
+	 * dependent on the value of "progression"                 
+	 */
+	private Map<String, Matrix4f> calculateCurrentAnimationPose() {
+		KeyFrame[] frames = getPreviousAndNextFrames();
+		float progression = calculateProgression(frames[0], frames[1]);
+		return interpolatePoses(frames[0], frames[1], progression);
+	}
+
+	/**
+	 * This is the method where the animator calculates and sets those all-
+	 * important "joint transforms" that I talked about so much in the tutorial.
+	 * 
+	 * This method applies the current pose to a given joint, and all of its
+	 * descendants. It does this by getting the desired local-transform for the
+	 * current joint, before applying it to the joint. Before applying the
+	 * transformations it needs to be converted from local-space to model-space
+	 * (so that they are relative to the model's origin, rather than relative to
+	 * the parent joint). This can be done by multiplying the local-transform of
+	 * the joint with the model-space transform of the parent joint.
+	 * 
+	 * The same thing is then done to all the child joints.
+	 * 
+	 * Finally the inverse of the joint's bind transform is multiplied with the
+	 * model-space transform of the joint. This basically "subtracts" the
+	 * joint's original bind (no animation applied) transform from the desired
+	 * pose transform. The result of this is then the transform required to move
+	 * the joint from its original model-space transform to it's desired
+	 * model-space posed transform. This is the transform that needs to be
+	 * loaded up to the vertex shader and used to transform the vertices into
+	 * the current pose.
+	 * 
+	 * @param currentPose
+	 *            - a map of the local-space transforms for all the joints for
+	 *            the desired pose. The map is indexed by the name of the joint
+	 *            which the transform corresponds to.
+	 * @param joint
+	 *            - the current joint which the pose should be applied to.
+	 * @param parentTransform
+	 *            - the desired model-space transform of the parent joint for
+	 *            the pose.
+	 *            
+	 *            
+	 *            
+	 * Applies the pose to the joints and all of its children.            
+	 */
+	private void applyPoseToJoints(Map<String, Matrix4f> currentPose, Joint joint, Matrix4f parentTransform) {
+		Matrix4f currentLocalTransform = currentPose.get(joint.name);
+		Matrix4f currentTransform = Matrix4f.mul(parentTransform, currentLocalTransform, null);
+		for (Joint childJoint : joint.children) {
+			applyPoseToJoints(currentPose, childJoint, currentTransform);
+		}
+		Matrix4f.mul(currentTransform, joint.getInverseBindTransform(), currentTransform);
+		joint.setAnimationTransform(currentTransform);
+	}
+
+	/**        
+	 * Finds the previous and next keyframe in the animation. 
+	 * In the case were there is no previous frame, the
+	 * first keyframe is used for previous and next.                
+	 */
+	private KeyFrame[] getPreviousAndNextFrames() {
+		KeyFrame[] allFrames = currentAnimation.getKeyFrames();
+		KeyFrame previousFrame = allFrames[0];
+		KeyFrame nextFrame = allFrames[0];
+		for (int i = 1; i < allFrames.length; i++) {
+			nextFrame = allFrames[i];
+			if (nextFrame.getTimeStamp() > animationTime) {
+				break;
+			}
+			previousFrame = allFrames[i];
+		}
+		return new KeyFrame[] { previousFrame, nextFrame };
+	}
+
+	/**
+	 * Calculates how far it is between the previous and next keyframe.
+	 * By finding the total time between the two keyframes, then the current time
+	 * it is in. And dividing those two values.
+	 */
+	private float calculateProgression(KeyFrame previousFrame, KeyFrame nextFrame) {
+		float totalTime = nextFrame.getTimeStamp() - previousFrame.getTimeStamp();
+		float currentTime = animationTime - previousFrame.getTimeStamp();
+		return currentTime / totalTime;
+	}
+
+	/**        
+	 *  Transforms the current pose of the model.
+	 *  Goes through all the joints, on each iteration it gets their transform in the previous frame,
+	 *  and getting the transform for the next frame.
+	 *  It then interpolates the two transforms, 
+	 *  and adds them to hash map that has the values of the current pose, 
+	 *  as well as the name of the current joint.
+	 */
+	private Map<String, Matrix4f> interpolatePoses(KeyFrame previousFrame, KeyFrame nextFrame, float progression) {
+		Map<String, Matrix4f> currentPose = new HashMap<String, Matrix4f>();
+		for (String jointName : previousFrame.getJointKeyFrames().keySet()) {
+			JointTransform previousTransform = previousFrame.getJointKeyFrames().get(jointName);
+			JointTransform nextTransform = nextFrame.getJointKeyFrames().get(jointName);
+			JointTransform currentTransform = JointTransform.interpolate(previousTransform, nextTransform, progression);
+			currentPose.put(jointName, currentTransform.getLocalTransform());
+		}
+		return currentPose;
+	}
+
+}

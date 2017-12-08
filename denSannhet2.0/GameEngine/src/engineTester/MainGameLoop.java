@@ -82,6 +82,7 @@ public class MainGameLoop {
 			grass.getTexture().setUseFakeLighting(true);
 			TexturedModel flower = loadTexturedModel("models/grassModel", "textures/flower", 1, loader);
 			flower.getTexture().setHasTransparency(true);
+			flower.getTexture().setUseFakeLighting(true);
 			TexturedModel lamp = loadTexturedModel("models/lamp/lamp", "models/lamp/lamp", 1, loader);
 			//TODO: have to use the check system from CollisionMultipleTerrains. but the "check-system" has to be a own method, so it can be used multiple places.
 			for(int i = 0; i < 100; i++) {
