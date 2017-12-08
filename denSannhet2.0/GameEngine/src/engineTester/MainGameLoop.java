@@ -67,7 +67,7 @@ public class MainGameLoop {
 		// getting the design, pattern of how we are painting the terrain.
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("textures/terrain/blendMap_alternative_2"));
 		// Create 4 different terrains, although same heightMap, texturePack and blendMap.
-		terrains.add(new Terrain(0, -1, loader, texturePack, blendMap,"textures/terrain/blendMap_GOT"));
+		terrains.add(new Terrain(0, -1, loader, texturePack, blendMap,"textures/terrain/heightmap"));
 		terrains.add(new Terrain(-1, -1, loader, texturePack, blendMap,"textures/terrain/heightmap"));
 		terrains.add(new Terrain(-1, 0, loader, texturePack, blendMap,"textures/terrain/heightmap"));
 		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap,"textures/terrain/heightmap"));
