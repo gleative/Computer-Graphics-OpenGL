@@ -26,7 +26,7 @@ public class MasterRenderer {
 	/**
 	 * FOV = Field of View
 	 */
-	private static final float FOV = 70;
+	private static final float FOV = 120;
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 10000;
 	
@@ -34,7 +34,14 @@ public class MasterRenderer {
 	private static final float GREEN = 0.5f;
 	private static final float BLUE = 0.5f;
 	
+	
+	/**
+	 *  Determines width, height, and how far we can see. Projection matrix will also make sure a huge square upclose will
+	 *  appear small in the distance. so we get the depth in the world.
+	 */
 	private Matrix4f projectionMatrix;
+	
+	
 	private Matrix4f animatedProjectionMatrix;
 	
 	private StaticShader shader = new StaticShader();
