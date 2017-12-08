@@ -112,10 +112,6 @@ public abstract class shaderProgram {
 		
 	}
 	
-	/**
-	 * Loads the shader, not important to know what it does.
-	 * Prints errors if something goes wrong
-	 */
 	private static int loadShader(String file, int type) {
 		StringBuilder shaderSource = new StringBuilder();
 	try {
