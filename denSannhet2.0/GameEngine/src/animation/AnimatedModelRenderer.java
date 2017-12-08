@@ -14,7 +14,7 @@ import toolbox.Maths;
 
 /**
  * Handles the rendering of a animated model/entity
- * The pose that the animated model will be rendererd in 
+ * The pose that the animated model will be rendered in 
  * is determined by the joint transforms
  * 
  * @author Glenn Arne Christensen
@@ -73,7 +73,7 @@ public class AnimatedModelRenderer {
 		shader.loadNumberOfRows(texture.getNumberOfRows());
 		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		
-		// Tells OpenGL which texture we want to render, and put it to one of the texture banks (GL_TEXTURE0 is one of the banks) ! 
+		// Tells OpenGL which texture we want to render
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getModelTexture().getID());
 	}

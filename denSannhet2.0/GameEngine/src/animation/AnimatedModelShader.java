@@ -12,6 +12,15 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.Camera;
 import entities.Light;
 
+/**
+ * Implemented the same way as done for a entity,
+ * only difference here is adding the two extra attributes:
+ * joint ids and weights
+ * 
+ * @author Glenn Arne Christensen
+ *
+ */
+
 public class AnimatedModelShader extends shaderProgram {
 	
 	private int location_transformationMatrix;

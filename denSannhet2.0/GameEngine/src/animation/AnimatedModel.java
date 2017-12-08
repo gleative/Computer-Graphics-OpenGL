@@ -11,13 +11,7 @@ import terrains.Terrain;
 import textures.ModelTexture;
 
 /**
- * 
- * This class represents an entity in the world that can be animated. It
- * contains the model's VAO which contains the mesh data, the texture, and the
- * root joint of the joint hierarchy, or "skeleton". It also holds an int which
- * represents the number of joints that the model's skeleton contains, and has
- * its own {@link Animator} instance which can be used to apply animations to
- * this entity.
+ * A entity that can be animated
  * 
  * @author Glenn Arne Christensen
  *
@@ -40,7 +34,6 @@ public class AnimatedModel {
 	
 	private Vector3f position;
 	private float rotX, rotY, rotZ, scale;
-	private Terrain terrain = null;
 	
 
 	/**
@@ -62,14 +55,11 @@ public class AnimatedModel {
 		this.rotY = rotY;
 		this.rotZ = rotZ;
 		this.scale = scale;
-		rootJoint.calculateInverseBindTransform(new Matrix4f()); // This function takes in a parent bindtransform, but as we use the root joint, we just send in a matrix
+		rootJoint.calculateInverseBindTransform(new Matrix4f()); // This function takes in a parent bind transform, but as we use the root joint, we just send in a matrix
 	}
 	
 	/**
 	 * Makes so we can move the animated model
-	 * @param dx
-	 * @param dy
-	 * @param dz
 	 */
 	public void increasePosition(float dx, float dy, float dz) {
 		this.position.x += dx;
@@ -79,9 +69,6 @@ public class AnimatedModel {
 	
 	/**
 	 * Change rotation of the entity
-	 * @param dx
-	 * @param dy
-	 * @param dz
 	 */
 	public void increaseRotation(float dx, float dy, float dz) {
 		this.rotX += dx;
@@ -185,21 +172,6 @@ public class AnimatedModel {
 
 	public void setScale(float scale) {
 		this.scale = scale;
-	}
-	
-	public void setTerrain(Terrain[][] terrain) {
-//		int terrainX = (int) Math.floor(position.x / Terrain.SIZE);
-//		int terrainZ = (int) Math.floor(position.z / Terrain.SIZE);
-//		
-//		this.terrain = terrain[terrainX][terrainZ];
-	}
-	
-	public Terrain getTerrain() {
-		return terrain;
-	}
-
-	
-
-	
+	}	
 
 }
