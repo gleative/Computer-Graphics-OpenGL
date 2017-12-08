@@ -80,7 +80,7 @@ public class JointTransform {
 	 */
 	protected static JointTransform interpolate(JointTransform frameA, JointTransform frameB, float progression) {
 		Vector3f pos = interpolate(frameA.position, frameB.position, progression);
-		Quaternion rot = Quaternion.interpolate(frameA.rotation, frameB.rotation, progression);
+		Quaternion rot = Quaternion.interpolate(frameA.rotation, frameB.rotation, progression); // Here "nlerp" is used and not "slerp"!
 		return new JointTransform(pos, rot);
 	}
 

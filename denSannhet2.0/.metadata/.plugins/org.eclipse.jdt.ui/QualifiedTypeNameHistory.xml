@@ -8,4 +8,5 @@
 <fullyQualifiedTypeName name="animation.AnimatedModel"/>
 <fullyQualifiedTypeName name="models.RawModel"/>
 <fullyQualifiedTypeName name="renderEngine.MasterRenderer"/>
+<fullyQualifiedTypeName name="animation.Quaternion"/>
 </qualifiedTypeNameHistroy>

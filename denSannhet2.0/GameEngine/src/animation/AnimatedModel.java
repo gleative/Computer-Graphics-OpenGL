@@ -29,37 +29,26 @@ public class AnimatedModel {
 	private final ModelTexture modelTexture;
 
 	// Skeleton of the animated model
-	private final Joint rootJoint;
-	private final int jointCount;
+	private final Joint rootJoint; // Only needed to have a reference to the root joint, as it is structured in a hierarchy
+	private final int jointCount; // Holds the amount of joints in the skeleton, so we know how big we have to create the matrix
 
+	/**
+	 * AnimatedModel needs its own animator, as this will do all the work, 
+	 * on animating the model and having it in the correct poses at the giving times
+	 */
 	private final Animator animator;
 	
-	// ADDED
 	private Vector3f position;
 	private float rotX, rotY, rotZ, scale;
 	private Terrain terrain = null;
 	
 
 	/**
-	 * Creates a new entity capable of animation. The inverse bind transform for
-	 * all joints is calculated in this constructor. The bind transform is
-	 * simply the original (no pose applied) transform of a joint in relation to
-	 * the model's origin (model-space). The inverse bind transform is simply
-	 * that but inverted.
 	 * 
-	 * @param model
-	 *            - the VAO containing the mesh data for this entity. This
-	 *            includes vertex positions, normals, texture coords, IDs of
-	 *            joints that affect each vertex, and their corresponding
-	 *            weights.
-	 * @param texture
-	 *            - the diffuse texture for the entity.
-	 * @param rootJoint
-	 *            - the root joint of the joint hierarchy which makes up the
-	 *            "skeleton" of the entity.
-	 * @param jointCount
-	 *            - the number of joints in the joint hierarchy (skeleton) for
-	 *            this entity.
+	 * Constructor to create a animated model.
+	 * Has the same values as creating a entity, only difference here
+	 * is that we need to send in the root joint, as well as
+	 * the amount of joints that are in the skeleton
 	 * 
 	 */	
 	public AnimatedModel(RawModel rawModel, ModelTexture modelTexture, Joint rootJoint, int jointCount, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
@@ -73,7 +62,7 @@ public class AnimatedModel {
 		this.rotY = rotY;
 		this.rotZ = rotZ;
 		this.scale = scale;
-		rootJoint.calcInverseBindTransform(new Matrix4f());
+		rootJoint.calculateInverseBindTransform(new Matrix4f()); // This function takes in a parent bindtransform, but as we use the root joint, we just send in a matrix
 	}
 	
 	/**
@@ -101,12 +90,7 @@ public class AnimatedModel {
 	}
 	
 	/**
-	 * Instructs this entity to carry out a given animation. To do this it
-	 * basically sets the chosen animation as the current animation in the
-	 * {@link Animator} object.
-	 * 
-	 * @param animation
-	 *            - the animation to be carried out.
+	 * Tells the animator of this animated model to do the animation.
 	 */
 	public void doAnimation(Animation animation) {
 		animator.doAnimation(animation);
@@ -120,25 +104,13 @@ public class AnimatedModel {
 		animator.update();
 	}
 
-	/**
-	 * Gets an array of the all important model-space transforms of all the
-	 * joints (with the current animation pose applied) in the entity. The
-	 * joints are ordered in the array based on their joint index. The position
-	 * of each joint's transform in the array is equal to the joint's index.
-	 * 
-	 * @return The array of model-space transforms of the joints in the current
-	 *         animation pose.
-	 */
-	public Matrix4f[] getJointTransforms() {
-		Matrix4f[] jointMatrices = new Matrix4f[jointCount];
-		addJointsToArray(rootJoint, jointMatrices);
-		return jointMatrices;
-	}
-
+	
 	/**
 	 * This adds the current model-space transform of a joint (and all of its
 	 * descendants) into an array of transforms. The joint's transform is added
 	 * into the array at the position equal to the joint's index.
+	 * 
+	 * Adds the current joint as well as their children 
 	 * 
 	 * @param headJoint
 	 *            - the current joint being added to the array. This method also
@@ -146,14 +118,25 @@ public class AnimatedModel {
 	 * @param jointMatrices
 	 *            - the array of joint transforms that is being filled.
 	 */
-	private void addJointsToArray(Joint headJoint, Matrix4f[] jointMatrices) {
-		jointMatrices[headJoint.index] = headJoint.getAnimatedTransform();
+	private void addJointsToMatrixArray(Joint headJoint, Matrix4f[] jointMatrices) {
+		jointMatrices[headJoint.jointID] = headJoint.getAnimatedTransform();
 		for (Joint childJoint : headJoint.children) {
-			addJointsToArray(childJoint, jointMatrices);
+			addJointsToMatrixArray(childJoint, jointMatrices);
 		}
 	}
 	
 	// Getters and setters
+	
+	/**
+	 * Creates a matrix, the size dependent of the amounts of joints in the skeleton.
+	 * The way the joints are ordered is dependent of the index of the joint. 
+	 * And returns the transforms of the joints in the current pose of the animation
+	 */
+	public Matrix4f[] getJointTransforms() {
+		Matrix4f[] jointMatrices = new Matrix4f[jointCount];
+		addJointsToMatrixArray(rootJoint, jointMatrices);
+		return jointMatrices;
+	}
 	
 	public RawModel getRawModel() {
 		return rawModel;

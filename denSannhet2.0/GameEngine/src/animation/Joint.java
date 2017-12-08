@@ -7,135 +7,98 @@ import org.lwjgl.util.vector.Matrix4f;
 
 /**
  * 
- * Represents a joint in a "skeleton". It contains the index of the joint which
- * determines where in the vertex shader uniform array the joint matrix for this
- * joint is loaded up to. It also contains the name of the bone, and a list of
- * all the child joints.
+ * Joint is a part of in the skeleton.
  * 
- * The "animatedTransform" matrix is the joint transform that I keep referring
- * to in the tutorial. This is the transform that gets loaded up to the vertex
- * shader and is used to transform vertices. It is a model-space transform that
- * transforms the joint from it's bind (original position, no animation applied)
- * position to it's current position in the current pose. Changing this
- * transform changes the position/rotation of the joint in the animated entity.
- * 
- * The two other matrices are transforms that are required to calculate the
- * "animatedTransform" in the {@link Animator} class. It also has the local bind
- * transform which is the original (no pose/animation applied) transform of the
- * joint relative to the parent joint (in bone-space).
- * 
- * The "localBindTransform" is the original (bind) transform of the joint
- * relative to its parent (in bone-space). The inverseBindTransform is that bind
- * transform in model-space, but inversed.
- * 
- * @author Karl
+ * @author Glenn Arne Christensen
  *
  */
 public class Joint {
 
-	public final int index;// ID
-	public final String name;
-	public final List<Joint> children = new ArrayList<Joint>(); // List of all the children
-
-	private Matrix4f animatedTransform = new Matrix4f(); // The current position and rotation of the joint, so changing this will make us able to set our model in different poses
+	public final int jointID;
 	
+	 // The name of the joint, that is found in the collada file
+	public final String name;
+	
+	// List of all the children of the joint. Not needed to know about the joints parent.
+	public final List<Joint> children = new ArrayList<Joint>(); 
+
+	// The current position and rotation of the joint, so changing this will make us able to set our model in different poses
+	private Matrix4f animatedTransform = new Matrix4f(); 
+	
+	// Is the original transform of the joint, in the relation of its parent joint, this is before the animation is applied.
 	private final Matrix4f localBindTransform;
+	
+	/**
+	 * Original position and rotation of the joint, in model space. Model space is the models origin. In blender that would be were the 3d cursor is located.
+	 * Its inverse as well, which means that it is the joint pointing towards the model space, and not the other way around.
+	 */
 	private Matrix4f inverseBindTransform = new Matrix4f();
 
 	/**
-	 * @param index
-	 *            - the joint's index (ID).
-	 * @param name
-	 *            - the name of the joint. This is how the joint is named in the
-	 *            collada file, and so is used to identify which joint a joint
-	 *            transform in an animation keyframe refers to.
-	 * @param bindLocalTransform
-	 *            - the bone-space transform of the joint in the bind position.
+	 * Joint constructor
 	 */
-	public Joint(int index, String name, Matrix4f bindLocalTransform) {
-		this.index = index;
+	public Joint(int jointID, String name, Matrix4f bindLocalTransform) {
+		this.jointID = jointID;
 		this.name = name;
 		this.localBindTransform = bindLocalTransform;
 	}
 
 	/**
-	 * Adds a child joint to this joint. Used during the creation of the joint
-	 * hierarchy. Joints can have multiple children, which is why they are
-	 * stored in a list (e.g. a "hand" joint may have multiple "finger" children
-	 * joints).
-	 * 
-	 * @param child
-	 *            - the new child joint of this joint.
+	 * Adds a child to the current joint. Used to create the
+	 * joint hierarchy.
 	 */
 	public void addChild(Joint child) {
 		this.children.add(child);
 	}
-
+	
 	/**
-	 * The animated transform is the transform that gets loaded up to the shader
-	 * and is used to deform the vertices of the "skin". It represents the
-	 * transformation from the joint's bind position (original position in
-	 * model-space) to the joint's desired animation pose (also in model-space).
-	 * This matrix is calculated by taking the desired model-space transform of
-	 * the joint and multiplying it by the inverse of the starting model-space
-	 * transform of the joint.
+	 * Calculates the inverse bind transform.
 	 * 
-	 * @return The transformation matrix of the joint which is used to deform
-	 *         associated vertices of the skin in the shaders.
+	 * This is calculated by multiplying the parent of the joints bind transform, and the original transform of the joint, together 
+	 * 
+	 * First the bindtransform has to be calculated which is done by
+	 * multiplying the parent of the joints bind transform, and the original transform of the joint.
+	 * By multiplying them we get original position of the joint, in relation of the origin of the model
+	 * And then we inverse it, so the joint points towards the origin of the model.
+	 * It will also calculate for the joints children, if it has it.
+	 * 
+	 * Wanted to write it like this 
+	 * "Matrix4f invertedBindTransform = Matrix4f.invert(Matrix4f.mul(parentBindTransform, localBindTransform, null), inverseBindTransform);"
+	 * But then the model got stretched and animation not getting applied as intended
 	 */
+	protected void calculateInverseBindTransform(Matrix4f parentBindTransform) {
+		Matrix4f bindTransform = Matrix4f.mul(parentBindTransform, localBindTransform, null);
+		Matrix4f.invert(bindTransform, inverseBindTransform);
+		
+		// If the joint has no children, no need to do the loop.
+		if(children.isEmpty()) {}
+		else {
+			for (Joint jointChild : children) {
+				jointChild.calculateInverseBindTransform(bindTransform);
+			}
+		}
+		
+	}
+	
+	// Getters and setters
+
 	public Matrix4f getAnimatedTransform() {
 		return animatedTransform;
 	}
 
 	/**
-	 * This method allows those all important "joint transforms" (as I referred
-	 * to them in the tutorial) to be set by the animator. This is used to put
-	 * the joints of the animated model in a certain pose.
-	 * 
-	 * @param animationTransform - the new joint transform.
+	 * Used by the animator class, by using this setter it can put the 
+	 * animated model in a pose. 
 	 */
 	public void setAnimationTransform(Matrix4f animationTransform) {
 		this.animatedTransform = animationTransform;
 	}
 
-	/**
-	 * This returns the inverted model-space bind transform. The bind transform
-	 * is the original model-space transform of the joint (when no animation is
-	 * applied). This returns the inverse of that, which is used to calculate
-	 * the animated transform matrix which gets used to transform vertices in
-	 * the shader.
-	 * 
-	 * @return The inverse of the joint's bind transform (in model-space).
-	 */
+	
 	public Matrix4f getInverseBindTransform() {
 		return inverseBindTransform;
 	}
 
-	/**
-	 * This is called during set-up, after the joints hierarchy has been
-	 * created. This calculates the model-space bind transform of this joint
-	 * like so: </br>
-	 * </br>
-	 * {@code bindTransform = parentBindTransform * localBindTransform}</br>
-	 * </br>
-	 * where "bindTransform" is the model-space bind transform of this joint,
-	 * "parentBindTransform" is the model-space bind transform of the parent
-	 * joint, and "localBindTransform" is the bone-space bind transform of this
-	 * joint. It then calculates and stores the inverse of this model-space bind
-	 * transform, for use when calculating the final animation transform each
-	 * frame. It then recursively calls the method for all of the children
-	 * joints, so that they too calculate and store their inverse bind-pose
-	 * transform.
-	 * 
-	 * @param parentBindTransform
-	 *            - the model-space bind transform of the parent joint.
-	 */
-	protected void calcInverseBindTransform(Matrix4f parentBindTransform) {
-		Matrix4f bindTransform = Matrix4f.mul(parentBindTransform, localBindTransform, null);
-		Matrix4f.invert(bindTransform, inverseBindTransform);
-		for (Joint child : children) {
-			child.calcInverseBindTransform(bindTransform);
-		}
-	}
+	
 
 }
