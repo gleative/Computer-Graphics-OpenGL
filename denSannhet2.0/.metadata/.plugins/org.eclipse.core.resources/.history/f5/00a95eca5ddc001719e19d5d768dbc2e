@@ -24,7 +24,7 @@ import models.RawModel;
 	 * we have to create a VBO ( vertex buffer object ).
 	 * For every VAO we have several VBO within the VAO. The VBO's are arrays holding onto Vertex, texture coordinates, normals and so on.
 	 *  One VBO has one set of specific data to the model.( example: vertex, texture coordinates, normals..)
-	 * @author Håkon S. Bøckman, Glenn Arne Christensen
+	 * @author Håkon S. Bøckman
 	 *
 	 */
 public class Loader {
@@ -62,11 +62,8 @@ public class Loader {
 		return new RawModel(vaoID, positions.length / 2);
 	}
 	
-	/**
-	 * Similar to the method above, only that it
-	 * stores two extra values to the attribute list
-	 */
-	public RawModel loadAnimatedModelToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices, int[] jointIds,
+	// ADDED Loads a animated model to the VAO
+	public RawModel loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices, int[] jointIds,
 			float[] vertexWeights) {
 		int vaoID = createVAO();
 		bindIndicesBuffer(indices);
@@ -155,6 +152,7 @@ public class Loader {
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		IntBuffer buffer = storeDataInIntBuffer(data);
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
+//		GL20.glVertexAttribPointer(attributeNumber, coordinateSize, GL11.GL_INT, false, 0, 0);
 		GL30.glVertexAttribIPointer(attributeNumber, coordinateSize, GL11.GL_INT, coordinateSize * 4,0); // This line did the fix, We multiply it by 4, because floats and Integers are 4 bytes big
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}

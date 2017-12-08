@@ -24,7 +24,7 @@ import models.RawModel;
 	 * we have to create a VBO ( vertex buffer object ).
 	 * For every VAO we have several VBO within the VAO. The VBO's are arrays holding onto Vertex, texture coordinates, normals and so on.
 	 *  One VBO has one set of specific data to the model.( example: vertex, texture coordinates, normals..)
-	 * @author Håkon S. Bøckman, Glenn Arne Christensen
+	 * @author Håkon S. Bøckman
 	 *
 	 */
 public class Loader {
@@ -62,10 +62,7 @@ public class Loader {
 		return new RawModel(vaoID, positions.length / 2);
 	}
 	
-	/**
-	 * Similar to the method above, only that it
-	 * stores two extra values to the attribute list
-	 */
+	// ADDED Loads a animated model to the VAO
 	public RawModel loadAnimatedModelToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices, int[] jointIds,
 			float[] vertexWeights) {
 		int vaoID = createVAO();

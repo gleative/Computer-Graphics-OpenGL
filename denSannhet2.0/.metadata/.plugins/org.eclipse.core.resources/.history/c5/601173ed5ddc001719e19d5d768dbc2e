@@ -21,6 +21,7 @@ import renderEngine.Loader;
 import textures.ModelTexture;
 import engineTester.MyFile;
 import models.RawModel;
+import models.TexturedModel;
 
 public class AnimatedModelLoader {	
 
@@ -35,7 +36,7 @@ public class AnimatedModelLoader {
 		
 		AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelfile, GeneralSettings.MAX_WEIGHTS);
 		MeshData modelMesh = entityData.getMeshData();
-		RawModel model = loader.loadAnimatedModelToVAO(modelMesh.getVertices(), modelMesh.getTextureCoords(), modelMesh.getNormals(), modelMesh.getIndices(), modelMesh.getJointIds(), modelMesh.getVertexWeights());
+		RawModel model = loader.loadToVAO(modelMesh.getVertices(), modelMesh.getTextureCoords(), modelMesh.getNormals(), modelMesh.getIndices(), modelMesh.getJointIds(), modelMesh.getVertexWeights());
 		ModelTexture texture = new ModelTexture(loader.loadTexture(textureFile)); // Set texture
 		SkeletonData skeletonData = entityData.getJointsData();
 		Joint headJoint = createJoints(skeletonData.headJoint);

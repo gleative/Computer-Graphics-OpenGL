@@ -21,6 +21,7 @@ import renderEngine.Loader;
 import textures.ModelTexture;
 import engineTester.MyFile;
 import models.RawModel;
+import models.TexturedModel;
 
 public class AnimatedModelLoader {	
 
