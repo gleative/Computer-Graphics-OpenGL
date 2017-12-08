@@ -25,6 +25,8 @@ public class StaticShader extends shaderProgram {
 	private int location_attenuation[];
 	private int location_shineDamper;
 	private int location_reflectivity;
+	private int location_useFakeLighting;
+	
 	private int location_skycolour;
 	private int location_numberOfRows;
 	private int location_offset;
@@ -47,6 +49,8 @@ public class StaticShader extends shaderProgram {
 		location_viewMatrix = super.getUniformLocation("viewMatrix");
 		location_shineDamper = super.getUniformLocation("shineDamper");
 		location_reflectivity = super.getUniformLocation("reflectivity");
+		location_useFakeLighting = super.getUniformLocation("useFakeLighting");
+		
 		location_skycolour = super.getUniformLocation("skyColour");
 		location_numberOfRows = super.getUniformLocation("numberOfRows");
 		location_offset = super.getUniformLocation("offset");
@@ -71,6 +75,10 @@ public class StaticShader extends shaderProgram {
 	
 	public void loadSkyColour(float r, float g, float b) {
 		super.loadVector(location_skycolour, new Vector3f(r,g,b));
+	}
+	
+	public void loadFakeLightingVariable(boolean useFake) {
+		super.loadBoolean(location_useFakeLighting, useFake);
 	}
 	
 	public void loadShineVariables(float damper, float reflectivity) {

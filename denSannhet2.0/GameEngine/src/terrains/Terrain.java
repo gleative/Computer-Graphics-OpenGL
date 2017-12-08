@@ -125,21 +125,29 @@ public class Terrain {
 	}
 	
 	/**
-	 * This method generate terrain, a flat terrain.
-	 * @param loader
-	 * @return
+	 * This method is called in the constructor Terrain, it generates terrain and saves the heightMaps values to
+	 * a matrix in field of the class, called heights.
+	 * Returns a Rawmodel.
+	 * @param loader, heightMap
+	 * @return RawModel
 	 */
 	private RawModel generateTerrain(Loader loader, String heightMap){
-		
 		BufferedImage image = null;
+		
 		try {
 			image = ImageIO.read(new File("res/" + heightMap + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println("Could not load HeightMap. Please check spelling of file path.");
 		}
+		
+//		Returns the height of the BufferedImage.
 		int VERTEX_COUNT = image.getHeight();
+	
+//		Creates a Matrix with getHeights results.
 		heights = new float [VERTEX_COUNT][VERTEX_COUNT];
+		
+//		Multiply the 
 		int count = VERTEX_COUNT * VERTEX_COUNT;
 		float[] vertices = new float[count * 3];
 		float[] normals = new float[count * 3];

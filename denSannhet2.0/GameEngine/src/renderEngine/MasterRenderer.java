@@ -94,7 +94,9 @@ public class MasterRenderer {
 	}
 	
 	/**
-	 *  Disable Culling of models
+	 *  Disable Culling of models. We are interested in not culling the model, when it has transparency, 
+	 *  because the viewer will be able to see the back side of the model through the transparent part of 
+	 *  the model.
 	 */
 	public static void disableCulling() {
 		GL11.glDisable(GL11.GL_CULL_FACE);

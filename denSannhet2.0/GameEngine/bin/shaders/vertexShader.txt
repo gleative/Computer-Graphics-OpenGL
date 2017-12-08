@@ -15,10 +15,16 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec3 lightPosition[10];
 
+uniform float useFakeLighting;
+
 uniform float numberOfRows;
 uniform vec2 offset;
 
+// Determines the density of the Fog on entities in the world
 const float density = 0.00035;
+
+// Determines the gradient of the fog on entities in the world.
+// the larger the number, the harder is the edge in the gradient.
 const float gradient = 5.00;
 
 void main(void){
@@ -28,7 +34,19 @@ void main(void){
 	vec4 positionRelativeToCam = viewMatrix * worldPosition; 
 	gl_Position = projectionMatrix * positionRelativeToCam;
 	pass_textureCoords = (textureCoords / numberOfRows) + offset;
-	surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
+	
+		vec3 actualNormal = normal;
+	
+	/* we check if fakeLighting is greater then, 0.5 if so we changes all the normals to
+	  xyz(0.0, 1.0, 0.0) leading it to point directly upwards and get even lighting. */
+	if(useFakeLighting > 0.5 ){
+		// pointing directly up
+		actualNormal = vec3(0.0, 1.0, 0.0);
+	}
+	surfaceNormal = (transformationMatrix * vec4(actualNormal, 0.0)).xyz;
+	
+	
+	
 	
 	for(int i = 0; i < 10; i++){
 		toLightVector[i] = lightPosition[i] - worldPosition.xyz;

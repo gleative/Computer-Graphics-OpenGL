@@ -7,12 +7,31 @@ public class ModelTexture {
 	private float shineDamper = 1;
 	private float reflectivity = 0;
 	
+	/**
+	 *  Have to tell if the model have transparency, if so its important that we don't 
+	 *  do back face culling on the following model.
+	 */
 	private boolean hasTransparency = false;
+	
+	/**
+	 * Since the grass models, or especily them. have normals that point really in very different ways
+	 * we want to give all the normals of that model a same value, so the lightning of the model will
+	 * be even if we choose so. Therefore we have a boolean to say so. so fakeLighting = set all the normals
+	 * to point upwards, relating to the model getting even light all over.
+	 */
+	private boolean useFakeLighting = false;
 	
 	private int numberOfRows = 1;
 	
 	
-	
+	public boolean isUseFakeLighting() {
+		return useFakeLighting;
+	}
+
+	public void setUseFakeLighting(boolean useFakeLighting) {
+		this.useFakeLighting = useFakeLighting;
+	}
+
 	public int getNumberOfRows() {
 		return numberOfRows;
 	}

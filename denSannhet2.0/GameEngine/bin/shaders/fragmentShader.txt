@@ -40,10 +40,23 @@ void main(void){
 	}
 	totalDiffuse = max(totalDiffuse, 0.2);
 	
+	
+	// textureColour is as the name implies, it's the colour of the texture. We do a small test to determine its 
+	// alpha values. If it is lesser then 0.5 we will assume the colour of
+	// the texture is supposed to be transparent, and then we will tell OpenGL to render it transparent. 
+	// This work almost perfectly, but the back face culling of models gives us some slight problem. Because
+	// now we can see the back face through the transparent part of the model. 
 	vec4 textureColour = texture(textureSampler, pass_textureCoords);
 	if(textureColour.a < 0.5 ){
 		discard;
 	}
+	
+	
+	
+	
+	
+	
+	
 	
 	out_Color = vec4(totalDiffuse, 1.0) *  textureColour + vec4(totalSpecular, 1.0);
 	out_Color = mix(vec4(skyColour, 1.0), out_Color, visibility);

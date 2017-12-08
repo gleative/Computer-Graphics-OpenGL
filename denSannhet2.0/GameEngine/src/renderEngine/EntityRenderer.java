@@ -60,6 +60,8 @@ public class EntityRenderer {
 	}
 	/**
 	 * Bind the VAO and Texture.
+	 * There is also a check of local boolean to determine if the model has transparency, and therefore
+	 * need to disable the culling of the back side of the model in context with the viewer.
 	 * We also load up damper and reflectivity onto texture, before binding it
 	 * @param model
 	 */
@@ -75,7 +77,8 @@ public class EntityRenderer {
 		if(texture.isHasTransparency()) {
 			MasterRenderer.disableCulling();
 		}
-		
+	// adjust the normals of the texture, to create more light if needed.
+		shader.loadFakeLightingVariable(texture.isUseFakeLighting());
 	// Load up shine settings
 		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 	// Bind the texture
@@ -83,6 +86,13 @@ public class EntityRenderer {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getID());
 	}
 	
+	/**
+	 * Unbind all the texture of the model.
+	 * 
+	 * We enable culling of models before we clear every vertexArray's
+	 * we do this to make sure culling of models is by "default" for every
+	 * entity within the game.
+	 */
 	private void unbindTexturedModel() {
 		MasterRenderer.enableCulling();
 		GL20.glDisableVertexAttribArray(0);
