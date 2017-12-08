@@ -15,7 +15,10 @@ public class DisplayManager {
 	private static final int HEIGHT = 760;
 	private static final int FPS_CAP = 120;
 	
+	// will hold the time of the end of the last frame.
 	private static long lastFrameTime;
+	
+	// holds onto the time taken to render previous frame.
 	private static float delta;
 	
 	/**
@@ -38,12 +41,21 @@ public class DisplayManager {
 		lastFrameTime = getCurrentTime();
 	};
 	
-	
+	/**
+	 * Sync, updates and keep track of the time of the game.
+	 */
 	public static void updateDisplay(){		
 		Display.sync(FPS_CAP);
 		Display.update();
+		
+		// gets the current time
 		long currentFrameTime = getCurrentTime();
+		
+		// subtract the current time with last time, we end up with the difference. We divide it so we get the 
+		// answer in to seconds.
 		delta = (currentFrameTime - lastFrameTime) / 1000f;
+		
+		// Updates the variable, before going on next loop.
 		lastFrameTime = currentFrameTime;
 	};
 	
@@ -55,6 +67,12 @@ public class DisplayManager {
 		Display.destroy();
 	};
 	
+	/**
+	 *  Sys.getTime will return the time in ticks, by dividing it with Sys.getTimerResolution 
+	 *  we end up answere in seconds. Since we want milliseconds instead of seconds, we multiply what we get from
+	 *  Sys.getTime by 1000.
+	 * @return float - returns time in milliseconds.
+	 */
 	private static long getCurrentTime() {
 		return Sys.getTime() * 1000 / Sys.getTimerResolution();
 	}

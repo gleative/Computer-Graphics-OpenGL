@@ -14,10 +14,13 @@ public class ModelTexture {
 	private boolean hasTransparency = false;
 	
 	/**
-	 * Since the grass models, or especily them. have normals that point really in very different ways
+	 * Since the grass models, or especially them. have normals that point really in very different ways
 	 * we want to give all the normals of that model a same value, so the lightning of the model will
 	 * be even if we choose so. Therefore we have a boolean to say so. so fakeLighting = set all the normals
-	 * to point upwards, relating to the model getting even light all over.
+	 * to point upwards, relating to the model getting even light all over. depending on the angle of the main light
+	 * source, but if the main light source is from the side, it will still define a shadow on the models since the 
+	 * model will only take inn the amount of light received from straight up, and not directly towards the source. So
+	 * the source will shine brighter directly onto the model then the fakeLight will.
 	 */
 	private boolean useFakeLighting = false;
 	

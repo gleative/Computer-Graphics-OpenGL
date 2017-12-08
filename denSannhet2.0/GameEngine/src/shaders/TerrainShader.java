@@ -68,6 +68,14 @@ public class TerrainShader extends shaderProgram{
 		}
 	}
 	
+	/**
+	 *  Important that we load up the following texture in correct order so the fragmentShader access them accordingly.
+	 *  Background to position 0
+	 *  Red to position 1
+	 *  Green to position 2
+	 *  Blue to position 3
+	 *  blenMap to position 4
+	 */
 	public void connectTextureUnits() {
 		super.loadInt(location_backgroundTexture, 0);
 		super.loadInt(location_rTexture, 1);

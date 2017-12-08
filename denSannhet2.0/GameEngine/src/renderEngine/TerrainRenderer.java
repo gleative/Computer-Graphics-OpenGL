@@ -26,6 +26,7 @@ public class TerrainRenderer {
 		this.shader = shader;
 		shader.start();
 		shader.loadProjectionMatrix(projectionMatrix);
+		// we only need to connect them once, and they will stay connected to the texturePack class for whole run of the game
 		shader.connectTextureUnits();
 		shader.stop();
 	}

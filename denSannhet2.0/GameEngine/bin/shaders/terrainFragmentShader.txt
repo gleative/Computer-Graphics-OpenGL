@@ -8,10 +8,20 @@ in float visibility;
 
 out vec4 out_Color;
 
+// Texture to the background of the blenMap, or lack of colour. In our case this is black
 uniform sampler2D backgroundTexture;
+
+// Texture of the colour Red, found in the texture blendMap.
 uniform sampler2D rTexture;
+
+// Texture of the colour Green, found in the texture blendMap.
 uniform sampler2D gTexture;
+
+// Texture of the colour Blue, found in the texture blendMap.
 uniform sampler2D bTexture;
+
+// Texture that will decide the patterns and to what extent we are going to blend the textures.
+// Contains all mentioned colours above.
 uniform sampler2D blendMap;
 
 uniform vec3 lightColour[10];
@@ -21,15 +31,27 @@ uniform float reflectivity;
 uniform vec3 skyColour;
 
 void main(void){
-
+	
+	// Finding the colours of the blendMap on current Fragment, also passing the textureCordinates (none tiled). So we know can map
+	// the texture 1 to 1 onto the terrain.
 	vec4 blendMapColour = texture(blendMap, pass_textureCoords);
+	
+	// Set the background colour (black) minus the colour found in the blendMap, we determine how much we want to render the
+	// backgroundTexture. Because we want to render the background when the colour is black.
 	float backTextureAmount = 1 - (blendMapColour.r + blendMapColour.g + blendMapColour.b);
-	vec2 tiledCoords = pass_textureCoords * 80;
+	
+	// Tile up the fragment, at the specified texture coordinates
+	vec2 tiledCoords = pass_textureCoords * 40; 
+	
+	// Assign the background colour and multiply it with the amount found earlier.
 	vec4 backgroundTextureColour = texture(backgroundTexture, tiledCoords) * backTextureAmount;
+
+	// Do the same here for red, green and blue.
 	vec4 rTextureColour = texture(rTexture, tiledCoords) * blendMapColour.r;
 	vec4 gTextureColour = texture(gTexture, tiledCoords) * blendMapColour.g;
 	vec4 bTextureColour = texture(bTexture, tiledCoords) * blendMapColour.b;
 	
+	// then we calculate the total colour to the vector. 
 	vec4 totalColour =  backgroundTextureColour + rTextureColour + gTextureColour + bTextureColour;
 	
 	vec3 unitNormal = normalize(surfaceNormal);

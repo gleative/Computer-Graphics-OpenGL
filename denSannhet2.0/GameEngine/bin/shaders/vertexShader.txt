@@ -28,7 +28,7 @@ uniform vec2 offset;
 
 // Determines the density of the Fog on entities in the world
 // We could say this determines the thickness of the fog
-const float density = 0.000035;
+const float density = 0.0035;
 
 // the larger the number, the harder is the edge in the gradient.
 // Determines the area affected of the fog, the higher the value is

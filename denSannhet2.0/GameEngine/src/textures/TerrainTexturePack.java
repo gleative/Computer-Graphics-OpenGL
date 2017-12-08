@@ -1,5 +1,13 @@
 package textures;
 
+/**
+ * This class contain the four textures that will be representing the texture off the terrain
+ * Meaning the class only holds onto 4 initialized TerrainTextures, and TerrainTextures class only holds onto
+ * the textures ID. So this class is as the name would imply, a pack containing textures.
+ * 
+ * @author Håkon S. Bøckman
+ *
+ */
 public class TerrainTexturePack {
 	
 	private TerrainTexture backgroundTexture;
