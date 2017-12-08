@@ -95,7 +95,6 @@ public abstract class shaderProgram {
 		GL20.glUniform2f(location, vector.x, vector.y);
 	}
 	
-	// Loads up a boolean, if its true we load up a 1, false we load up a 0
 	protected void loadBoolean(int location, boolean value) {
 		float toLoad = 0;
 		if(value) {
@@ -104,7 +103,6 @@ public abstract class shaderProgram {
 		GL20.glUniform1f(location, toLoad);
 	}
 	
-	// Loads a matrix to a uniform variable, need a float buffer see on variables
 	protected void loadMatrix(int location, Matrix4f matrix) {
 		matrix.store(matrixBuffer);
 		matrixBuffer.flip();
@@ -112,10 +110,6 @@ public abstract class shaderProgram {
 		
 	}
 	
-	/**
-	 * Loads the shader, not important to know what it does.
-	 * Prints errors if something goes wrong
-	 */
 	private static int loadShader(String file, int type) {
 		StringBuilder shaderSource = new StringBuilder();
 	try {

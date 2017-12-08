@@ -18,6 +18,9 @@ import org.lwjgl.util.vector.Matrix4f;
  * 
  * and a slightly longer one:
  * https://www.youtube.com/watch?v=fKIss4EV6ME&t=0s
+ * 
+ * 
+ * @author Karl
  *
  */
 public class Quaternion {

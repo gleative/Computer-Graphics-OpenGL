@@ -10,10 +10,6 @@ import entities.Camera;
 import entities.Light;
 import toolbox.Maths;
 
-
-/**
- * Used to create the static models
- */
 public class StaticShader extends shaderProgram {
 	
 	private static final int MAX_LIGHTS = 10;

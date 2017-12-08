@@ -40,13 +40,11 @@ public abstract class shaderProgram {
 		bindAttributes();
 		GL20.glLinkProgram(programID);
 		GL20.glValidateProgram(programID);
-		getAllUniformLocations(); // Gets called up each time shaderprogram is created
+		getAllUniformLocations();
 	}
 	
-	// Makes sure all shader program classes will have a method that gets all uniform locations, remember to put it in the constructor!
 	protected abstract void getAllUniformLocations();
 	
-	// Gets the location of a uniform variable in shader code
 	protected int getUniformLocation(String uniformName) {
 		return GL20.glGetUniformLocation(programID, uniformName);
 	}
@@ -68,34 +66,28 @@ public abstract class shaderProgram {
 		GL20.glDeleteProgram(programID);
 	}
 	
-	// Class extending this must have this method
 	protected abstract void bindAttributes();
 	
-	// Binds a shader to a attribute in the VAO
 	protected void bindAttribute(int attribute, String variableName) {
 		 GL20.glBindAttribLocation(programID, attribute, variableName);
 	}
 	
-	// Loads up the location of the uniform and the float value
 	protected void loadFloat(int location, float value) {
 		GL20.glUniform1f(location, value);
 	}
 	
-	// Loads up the location of the uniform and the int value
 	public void loadInt(int location, int value) {
 		GL20.glUniform1i(location, value);
 	}
 	
-	// Loads up a vector to a uniform
 	protected void loadVector(int location, Vector3f vector) {
-		GL20.glUniform3f(location, vector.x, vector.y, vector.z);  // Notice glUniform3f, because its 3 floats
+		GL20.glUniform3f(location, vector.x, vector.y, vector.z);
 	}
 	
 	protected void load2DVector(int location, Vector2f vector) {
 		GL20.glUniform2f(location, vector.x, vector.y);
 	}
 	
-	// Loads up a boolean, if its true we load up a 1, false we load up a 0
 	protected void loadBoolean(int location, boolean value) {
 		float toLoad = 0;
 		if(value) {
@@ -104,7 +96,6 @@ public abstract class shaderProgram {
 		GL20.glUniform1f(location, toLoad);
 	}
 	
-	// Loads a matrix to a uniform variable, need a float buffer see on variables
 	protected void loadMatrix(int location, Matrix4f matrix) {
 		matrix.store(matrixBuffer);
 		matrixBuffer.flip();
@@ -112,10 +103,6 @@ public abstract class shaderProgram {
 		
 	}
 	
-	/**
-	 * Loads the shader, not important to know what it does.
-	 * Prints errors if something goes wrong
-	 */
 	private static int loadShader(String file, int type) {
 		StringBuilder shaderSource = new StringBuilder();
 	try {

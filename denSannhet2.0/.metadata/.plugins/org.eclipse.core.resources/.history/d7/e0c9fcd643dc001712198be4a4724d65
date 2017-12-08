@@ -132,7 +132,6 @@ public class AnimatedModelShader extends shaderProgram {
 		}
 	}
 	
-	// Takes inn the joint transforms we want to load up
 	public void loadJointTransforms(Matrix4f[] transforms) {
 		for(int i=0; i < MAX_JOINTS; i++) {
 			if(i < transforms.length) {
@@ -148,7 +147,6 @@ public class AnimatedModelShader extends shaderProgram {
 		super.loadMatrix(location_projectionMatrix, projection);
 	}
 	
-	// Takes inn the view matrix we want to load up
 	public void loadViewMatrix(Camera camera) {
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
