@@ -76,15 +76,16 @@ public class Animator {
 	}
 
 	/**
-	 * Increases the time of the animated that is current. If the animated time is
-	 * longer than the lenght of the animation, it will then start over again, so 
-	 * the animation loops.
+	 * Increases the current animation time which allows the animation to
+	 * progress. If the current animation has reached the end then the timer is
+	 * reset, causing the animation to loop.
+	 * 
+	 * Increases the time of the animated that is current.
 	 */
 	private void increaseAnimationTime() {
 		animationTime += DisplayManager.getFrameTimeSeconds();
 		if (animationTime > currentAnimation.getLength()) {
-//			this.animationTime %= currentAnimation.getLength();
-			this.animationTime = 0; // Sets it back to zero, so the animation time is reset
+			this.animationTime %= currentAnimation.getLength();
 		}
 	}
 
