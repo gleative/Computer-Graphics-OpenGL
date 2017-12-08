@@ -39,13 +39,16 @@ public class AnimatedModelRenderer {
 	 * Renders the animated entity. Works the same as rendering a entity,
 	 * but notice with a animated model we have to enable five attributes
 	 * of the VAO before we render the animated entity. This is because 
-	 * we need to have the indices and weights
-	 * @param entity
+	 * we need to have the joints and weights
 	 */
 	public void render(AnimatedModel entity) {
 		prepareTexturedModel(entity);
 		prepareInstance(entity);
-		shader.loadJointTransforms(entity.getJointTransforms()); // The joint transforms get loaded up to the shader in a uniform array
+		
+		// Have to get the joint transforms of the animated model before we render it
+		shader.loadJointTransforms(entity.getJointTransforms());
+		
+		
 		GL11.glDrawElements(GL11.GL_TRIANGLES, entity.getRawModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 		unbindTexturedModel(); // Unbinds all textures after its done
 	}
@@ -53,7 +56,6 @@ public class AnimatedModelRenderer {
 	/**
 	 * Prepares the animated model by enabling five attributes of the VAO.
 	 * We also load up damper and reflectivity onto texture, before binding it.
-	 * @param entity
 	 */
 	public void prepareTexturedModel (AnimatedModel entity) {
 		RawModel rawModel = entity.getRawModel();
@@ -78,7 +80,6 @@ public class AnimatedModelRenderer {
 	
 	/**
 	 * Creates a transformationMatrix from the entities position
-	 * @param entity
 	 */
 	private void prepareInstance(AnimatedModel entity) {
 		Matrix4f transfomationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
@@ -102,32 +103,5 @@ public class AnimatedModelRenderer {
 		GL30.glBindVertexArray(0);
 		
 	}
-
-
-	/**
-	 * Starts the shader program and loads up the projection view matrix, as
-	 * well as the light direction. Enables and disables a few settings which
-	 * should be pretty self-explanatory.
-	 * 
-	 * @param camera
-	 *            - the camera being used.
-	 * @param lightDir
-	 *            - the direction of the light in the scene.
-	 */
-//	private void prepare(ICamera camera, Vector3f lightDir) {
-//		shader.start();
-//		shader.projectionViewMatrix.loadMatrix(camera.getProjectionViewMatrix());
-//		shader.lightDirection.loadVec3(lightDir);
-//		OpenGlUtils.antialias(true);
-//		OpenGlUtils.disableBlending();
-//		OpenGlUtils.enableDepthTesting(true);
-//	}
-
-	/**
-	 * Stops the shader program after rendering the entity.
-	 */
-//	private void finish() {
-//		shader.stop();
-//	}
 
 }

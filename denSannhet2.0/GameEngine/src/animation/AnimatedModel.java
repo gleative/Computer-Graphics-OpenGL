@@ -106,21 +106,12 @@ public class AnimatedModel {
 
 	
 	/**
-	 * This adds the current model-space transform of a joint (and all of its
-	 * descendants) into an array of transforms. The joint's transform is added
-	 * into the array at the position equal to the joint's index.
-	 * 
-	 * Adds the current joint as well as their children 
-	 * 
-	 * @param headJoint
-	 *            - the current joint being added to the array. This method also
-	 *            adds the transforms of all the descendents of this joint too.
-	 * @param jointMatrices
-	 *            - the array of joint transforms that is being filled.
+	 * Adds the current joint as well as their children to the matrix array
+	 * containing the joint transforms
 	 */
-	private void addJointsToMatrixArray(Joint headJoint, Matrix4f[] jointMatrices) {
-		jointMatrices[headJoint.jointID] = headJoint.getAnimatedTransform();
-		for (Joint childJoint : headJoint.children) {
+	private void addJointsToMatrixArray(Joint currentJoint, Matrix4f[] jointMatrices) {
+		jointMatrices[currentJoint.jointID] = currentJoint.getAnimatedTransform();
+		for (Joint childJoint : currentJoint.children) {
 			addJointsToMatrixArray(childJoint, jointMatrices);
 		}
 	}
@@ -146,11 +137,7 @@ public class AnimatedModel {
 		return modelTexture;
 	}
 
-	/**
-	 * @return The root joint of the joint hierarchy. This joint has no parent,
-	 *         and every other joint in the skeleton is a descendant of this
-	 *         joint.
-	 */
+
 	public Joint getRootJoint() {
 		return rootJoint;
 	}

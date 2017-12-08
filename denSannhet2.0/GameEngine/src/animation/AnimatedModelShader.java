@@ -29,19 +29,10 @@ public class AnimatedModelShader extends shaderProgram {
 	private int location_jointTransforms[]; 
 	
 	private static final int MAX_LIGHTS = 10;
-
-	private static final int MAX_JOINTS = 50;
-	private static final int DIFFUSE_TEX_UNIT = 0;
+	private static final int MAX_JOINTS = 50; // The max number of joints allowed in a skeleton
 	
 	private static final String VERTEX_SHADER = "src/animation/animatedEntityVertex.txt";
 	private static final String FRAGMENT_SHADER = "src/animation/animatedEntityFragment.txt";
-
-	/**
-	 * Creates the shader program for the {@link AnimatedModelRenderer} by
-	 * loading up the vertex and fragment shader code files. It also gets the
-	 * location of all the specified uniform variables, and also indicates that
-	 * the diffuse texture will be sampled from texture unit 0.
-	 */
 	
 	/**
 	 * Creates a shader program for the AnimatedModelRenderer and 
