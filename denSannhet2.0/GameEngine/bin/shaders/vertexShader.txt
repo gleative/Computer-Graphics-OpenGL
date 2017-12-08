@@ -20,11 +20,11 @@ uniform float useFakeLighting;
 uniform float numberOfRows;
 uniform vec2 offset;
 
-// Determines the density of the Fog on entities in the world
-const float density = 0.00035;
-
-// Determines the gradient of the fog on entities in the world.
 // the larger the number, the harder is the edge in the gradient.
+// Determines the gradient of the fog on entities in the world.
+
+const float density = 0.00035;
+// Determines the density of the Fog on entities in the world
 const float gradient = 5.00;
 
 void main(void){

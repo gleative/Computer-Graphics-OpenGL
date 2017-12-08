@@ -14,6 +14,9 @@ import toolbox.Maths;
 
 /**
  * Handles the rendering of a animated model/entity
+ * The pose that the animated model will be rendererd in 
+ * is determined by the joint transforms
+ * 
  * @author Glenn Arne Christensen
  */
 public class AnimatedModelRenderer {
