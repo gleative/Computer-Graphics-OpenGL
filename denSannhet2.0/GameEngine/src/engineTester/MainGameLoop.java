@@ -65,9 +65,9 @@ public class MainGameLoop {
 		// creating the package of textures
 		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, bTexture, gTexture);
 		// getting the design, pattern of how we are painting the terrain.
-		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("textures/terrain/blendMap"));
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("textures/terrain/blendMap_alternative_2"));
 		// Create 4 different terrains, although same heightMap, texturePack and blendMap.
-		terrains.add(new Terrain(0, -1, loader, texturePack, blendMap,"textures/terrain/heightmap"));
+		terrains.add(new Terrain(0, -1, loader, texturePack, blendMap,"textures/terrain/blendMap_GOT"));
 		terrains.add(new Terrain(-1, -1, loader, texturePack, blendMap,"textures/terrain/heightmap"));
 		terrains.add(new Terrain(-1, 0, loader, texturePack, blendMap,"textures/terrain/heightmap"));
 		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap,"textures/terrain/heightmap"));
@@ -138,8 +138,8 @@ public class MainGameLoop {
 			// Render with animation
 			renderer.render(lights, cameraOnAnimatedPlayer, animatedEntity);
 			
-			collisionCameraTerrain(cameraOnAnimatedPlayer, terrains);
-//			cameraOnAnimatedPlayer.Move();
+//			collisionCameraTerrain(cameraOnAnimatedPlayer, terrains);
+			cameraOnAnimatedPlayer.Move();
 //			renderer.render(lights, cameraOnAnimatedPlayer); // This made so it rendered
 //			renderer.processAnimatedEntity(animatedPlayer); // Accepts AnimatedPlayer type aswell, because it extends "AnimationModel"
 			animatedPlayer.update();
@@ -194,20 +194,20 @@ public class MainGameLoop {
 		}
 	}
 	
-	private static void collisionCameraTerrain(Camera camera, List<Terrain> terrains) {
-		int px = (int) camera.getPosition().x;
-		int pz = (int) camera.getPosition().z;
-		
-		if( px <= 800 && px >= 0 && pz >= -800 && pz <= 0) {       // x: 0 to 800 and z: 0 to -800
-			camera.Move(terrains.get(0));
-		}else if ( px >= -800 && px <= 0 && pz >= -800 && pz <= 0 ) {	// x: 0 to -800 and z: 0 to -800
-			camera.Move(terrains.get(1));
-		}else if ( px >= -800 && px <= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to -800 and z: 0 to 800
-			camera.Move(terrains.get(2));
-		}else if ( px <= 800 && px >= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to 800 and z: 0 to 800
-			camera.Move(terrains.get(3));
-		}
-	}
+//	private static void collisionCameraTerrain(Camera camera, List<Terrain> terrains) {
+//		int px = (int) camera.getPosition().x;
+//		int pz = (int) camera.getPosition().z;
+//		
+//		if( px <= 800 && px >= 0 && pz >= -800 && pz <= 0) {       // x: 0 to 800 and z: 0 to -800
+//			camera.Move(terrains.get(0));
+//		}else if ( px >= -800 && px <= 0 && pz >= -800 && pz <= 0 ) {	// x: 0 to -800 and z: 0 to -800
+//			camera.Move(terrains.get(1));
+//		}else if ( px >= -800 && px <= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to -800 and z: 0 to 800
+//			camera.Move(terrains.get(2));
+//		}else if ( px <= 800 && px >= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to 800 and z: 0 to 800
+//			camera.Move(terrains.get(3));
+//		}
+//	}
 	
 	private static void collisionMultipleTerrainsAnimatedPlayer(AnimatedPlayer player, AnimatedModel animatedEntity, List<Terrain> terrains) {
 		int px = (int) player.getPosition().x;

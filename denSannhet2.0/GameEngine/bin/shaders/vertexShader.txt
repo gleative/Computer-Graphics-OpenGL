@@ -14,8 +14,8 @@ out float visibility;
 
 uniform mat4 transformationMatrix;
 
-// This matrix determines how far the camra can view, how wide and make sure a square that are really big upclose
-// will apear smaller in the distance.
+// This matrix determines how far the camera can view, how wide and make sure a square that are really big up close
+// will appear smaller in the distance.
 uniform mat4 projectionMatrix;
 
 uniform mat4 viewMatrix;
@@ -28,7 +28,7 @@ uniform vec2 offset;
 
 // Determines the density of the Fog on entities in the world
 // We could say this determines the thickness of the fog
-const float density = 0.0035;
+const float density = 0.000035;
 
 // the larger the number, the harder is the edge in the gradient.
 // Determines the area affected of the fog, the higher the value is
@@ -41,6 +41,8 @@ void main(void){
 	
 	vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
 	
+	// Vector pointing to the current vertices of the entity relative to the Camera. This is to later 
+	// calculate the distance between the camera and the entity to calculate how much fog affect the entity.
 	vec4 positionRelativeToCam = viewMatrix * worldPosition; 
 	
 	gl_Position = projectionMatrix * positionRelativeToCam;
@@ -65,10 +67,13 @@ void main(void){
 	
 	toCameraVector = (inverse (viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
 	
+	// finding the distance of the vector between the entity in the world and the camera
 	float distance = length(positionRelativeToCam.xyz);
 	
+	// calculating the visibility value base on the distance from camera and the specified density and gradient of fog
 	visibility = exp(-pow((distance*density),gradient));
 	
+	// make sure the visibility results will stay within the values of 0.0 to 1.0
 	visibility = clamp(visibility,0.0,1.0);
 	
 	

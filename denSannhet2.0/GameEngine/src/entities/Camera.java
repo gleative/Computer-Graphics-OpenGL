@@ -29,9 +29,9 @@ public class Camera {
 	}
 	
 	
-	public void Move(Terrain terrain) {
+	public void Move(/*Terrain terrain*/) {
 		calculateZoom();
-		calculatePitch(terrain);
+		calculatePitch(/*terrain*/);
 		calculateAngleAroundPlayer();
 		float horizontalDistance = calculateHorizontalDistance();
 		float verticalDistance = calculateVerticalDistance();
@@ -92,16 +92,35 @@ public class Camera {
 		}
 	}
 	
-	private void calculatePitch(Terrain terrain) {
+	private void calculatePitch(/*Terrain terrain*/) {
 		if(Mouse.isButtonDown(1)) {
 			float pitchChange = Mouse.getDY() * 0.1f;
 			pitch  -= pitchChange;
 		}
-		if( pitch < (terrain.getHeightOfTerrain(terrain.getX(), terrain.getZ()) + 5.0f) ) {
-			pitch = terrain.getHeightOfTerrain(terrain.getX(), terrain.getZ()) + 5.0f ;
-		}
-		
 	}
+	
+//		if(isCameraWithinTerrain(terrain, this)){
+//			if( pitch < (terrain.getHeightOfTerrain(terrain.getX(), terrain.getZ()) + 5.0f) ) {
+//				pitch = terrain.getHeightOfTerrain(terrain.getX(), terrain.getZ()) + 5.0f ;
+//			}
+//		}
+//	}
+//	
+//	private boolean isCameraWithinTerrain(Terrain terrain, Camera camera) {
+//		int px = (int) camera.getPosition().x;
+//		int pz = (int) camera.getPosition().z;
+//		
+//		if( px <= 800 && px >= 0 && pz >= -800 && pz <= 0) {       // x: 0 to 800 and z: 0 to -800
+//			return true;
+//		}else if ( px >= -800 && px <= 0 && pz >= -800 && pz <= 0 ) {	// x: 0 to -800 and z: 0 to -800
+//			return true;
+//		}else if ( px >= -800 && px <= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to -800 and z: 0 to 800
+//			return true;
+//		}else if ( px <= 800 && px >= 0 && pz <= 800 && pz >= 0 ) {	// x: 0 to 800 and z: 0 to 800
+//			return true;
+//		}
+//		return false;
+//	}
 	
 	private void calculateAngleAroundPlayer() {
 		if(Mouse.isButtonDown(0)) {

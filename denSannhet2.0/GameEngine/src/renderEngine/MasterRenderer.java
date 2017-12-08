@@ -199,9 +199,8 @@ public class MasterRenderer {
 	}
 	
 	/**
-	 * Creates the "box" we view the world in, and determines how far, wide and high we can see.
-	 * the aspect ratio will be determined by the screen size, and the length and wideness of the 
-	 * world we see at same time will be determined by 
+	 * Initialize the "box" we view the world in, and determines how far, wide and high we can see.
+	 * 
 	 */
 	private void createProjectionMatrix() {
 		float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();

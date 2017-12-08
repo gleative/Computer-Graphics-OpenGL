@@ -52,13 +52,10 @@ void main(void){
 	}
 	
 	
-	
-	
-	
-	
-	
-	
 	out_Color = vec4(totalDiffuse, 1.0) *  textureColour + vec4(totalSpecular, 1.0);
+	
+	// Mix is a open GL function that accepts, colour1, colour2 and a float. The floats value will reflect how much 
+	// the two colours should be mixed together. In this case visibility is already calculated in the vertexShader.
 	out_Color = mix(vec4(skyColour, 1.0), out_Color, visibility);
 
 }
