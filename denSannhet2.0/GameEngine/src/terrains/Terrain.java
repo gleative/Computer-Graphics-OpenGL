@@ -126,7 +126,7 @@ public class Terrain {
 	
 	/**
 	 * This method is called in the constructor Terrain, it generates terrain and saves the heightMaps values to
-	 * a matrix in field of the class, called heights.
+	 * a float in the fields of the class, called heights.
 	 * Returns a Rawmodel.
 	 * @param loader, heightMap
 	 * @return RawModel
@@ -144,11 +144,10 @@ public class Terrain {
 //		Returns the height of the BufferedImage.
 		int VERTEX_COUNT = image.getHeight();
 	
-//		since each pixel in the heightMap represent a vertex. the vertex count of the terrain will now be decided
+		//since each pixel in the heightMap represent a vertex. the vertex count of the terrain will now be decided
 		// by the pixel count of the hieghtMap
 		heights = new float [VERTEX_COUNT][VERTEX_COUNT];
 		
-//		Multiply the 
 		int count = VERTEX_COUNT * VERTEX_COUNT;
 		float[] vertices = new float[count * 3];
 		float[] normals = new float[count * 3];
@@ -158,8 +157,11 @@ public class Terrain {
 		for(int i = 0; i < VERTEX_COUNT; i++){
 			for(int j = 0; j < VERTEX_COUNT; j++){
 				vertices[vertexPointer * 3] = (float)j/((float)VERTEX_COUNT - 1) * SIZE;
+				
 				float height = getHeight(j, i, image);
 				heights[j][i] = height; 
+				// setting the vertex point equal to the corresponding pixels MAX_HEIGHT returned from the
+				// getHeight function.
 				vertices[vertexPointer * 3 + 1] = height;
 				vertices[vertexPointer * 3 + 2] = (float)i/((float)VERTEX_COUNT - 1) * SIZE;
 				
@@ -201,7 +203,15 @@ public class Terrain {
 		return normal;
 	}
 	
-	
+	/**
+	 *  Returns a height that is represented by a specified pixel on the heightMap. the numbers returned are in range
+	 *  from -256^3 to 256^3 so we convert them to reasonable numbers, then multiply them with specified MAX_HEIGHT field
+	 *  in this class. Therefore not creating anything outside of the scope of the terrain.
+	 * @param x
+	 * @param y
+	 * @param image
+	 * @return float - containing two values, both in the range of -MAX_HEIGHT to MAX_HEIGHT
+	 */
 	private float getHeight(int x, int y, BufferedImage image) {
 		if(x < 0 || x >= image.getHeight() || y < 0 || y >= image.getHeight()) {
 			return 0;
