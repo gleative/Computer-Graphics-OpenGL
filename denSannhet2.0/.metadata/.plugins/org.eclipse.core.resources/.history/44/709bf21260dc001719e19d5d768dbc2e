@@ -16,6 +16,7 @@ import colladaParser.JointTransformData;
 import colladaParser.KeyFrameData;
 import colladaParser.MeshData;
 import colladaParser.SkeletonData;
+import engineTester.GeneralSettings;
 import renderEngine.Loader;
 import textures.ModelTexture;
 import engineTester.MyFile;
@@ -27,11 +28,12 @@ public class AnimatedModelLoader {
 	 * Creates an AnimatedEntity from the data in an entity file. It loads up
 	 * the collada model data, stores the extracted data in a VAO, sets up the
 	 * joint heirarchy, and loads up the entity's texture.
+	 * 
 	 */
 	public AnimatedModel loadAnimatedModel(String modelFile, String textureFile, Vector3f position, float rotX, float rotY, float rotZ, float scale, Loader loader) {
 		MyFile modelfile = new MyFile("res", modelFile +".dae");
 		
-		AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelfile, 3);
+		AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelfile, GeneralSettings.MAX_WEIGHTS);
 		MeshData modelMesh = entityData.getMeshData();
 		RawModel model = loader.loadAnimatedModelToVAO(modelMesh.getVertices(), modelMesh.getTextureCoords(), modelMesh.getNormals(), modelMesh.getIndices(), modelMesh.getJointIds(), modelMesh.getVertexWeights());
 		ModelTexture texture = new ModelTexture(loader.loadTexture(textureFile)); // Set texture

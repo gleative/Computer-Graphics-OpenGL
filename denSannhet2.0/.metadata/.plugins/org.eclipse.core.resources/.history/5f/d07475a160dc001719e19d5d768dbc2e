@@ -16,6 +16,7 @@ import colladaParser.JointTransformData;
 import colladaParser.KeyFrameData;
 import colladaParser.MeshData;
 import colladaParser.SkeletonData;
+import engineTester.GeneralSettings;
 import renderEngine.Loader;
 import textures.ModelTexture;
 import engineTester.MyFile;
@@ -27,6 +28,7 @@ public class AnimatedModelLoader {
 	 * Creates an AnimatedEntity from the data in an entity file. It loads up
 	 * the collada model data, stores the extracted data in a VAO, sets up the
 	 * joint heirarchy, and loads up the entity's texture.
+	 * 
 	 */
 	public AnimatedModel loadAnimatedModel(String modelFile, String textureFile, Vector3f position, float rotX, float rotY, float rotZ, float scale, Loader loader) {
 		MyFile modelfile = new MyFile("res", modelFile +".dae");
