@@ -59,6 +59,10 @@ public class DisplayManager {
 		lastFrameTime = currentFrameTime;
 	};
 	
+	/**
+	 *  Simple getter to let other class access the time
+	 * @return delta - a float representing time.
+	 */
 	public static float getFrameTimeSeconds() {
 		return delta;
 	}

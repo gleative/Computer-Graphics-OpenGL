@@ -56,7 +56,7 @@ public class Camera {
 	public float getRoll() {
 		return roll;
 	}
-	
+/*	
 //	private void calculateCameraPosition(float horizontalDistance, float verticalDistance) {
 //		float theta = player.getRotY() + angleAroundPlayer;
 //		float offsetX = (float) (horizontalDistance * Math.sin(Math.toRadians(theta)));
@@ -65,7 +65,19 @@ public class Camera {
 //		position.z = player.getPosition().z - offsetZ;
 //		position.y = player.getPosition().y + verticalDistance;
 //	}
+*/	
 	
+	/**
+	 * After finding the horizontalDistance we can easily find the offset of both x and z.
+	 * By geometry we know that the opposite angle of rotY, meaning behind the player will be equal to rotY.
+	 * But since the angle can have been adjusted by the mouse input, we have to add both values together to
+	 * determine the angle towards the camera. We save this angel to theta.
+	 * then we find the offsets, then we subtract both of them from players current x and z positions and we 
+	 * get the cameras position in x and z. Cameras y position is found with similar method, only we use the pitch
+	 * aka the angle camera is looking down at the player. 
+	 * @param horizontalDistance
+	 * @param verticalDistance
+	 */
 	private void calculateCameraPosition(float horizontalDistance, float verticalDistance) {
 		float theta = animatedPlayer.getRotY() + angleAroundPlayer;
 		float offsetX = (float) (horizontalDistance * Math.sin(Math.toRadians(theta)));
@@ -83,22 +95,32 @@ public class Camera {
 		return (float) (distanceFromPlayer * Math.sin(Math.toRadians(pitch)));
 	}
 	
+	/**
+	 *  Calculate the distanceFromPlayer based on the input from Mouse.getWheel. Multiply this number with 0.1f since
+	 *  its so large by default. Make it more smoother.
+	 */
 	private void calculateZoom() {
 		float zoomLevel = Mouse.getDWheel() * 0.1f;
 		distanceFromPlayer -= zoomLevel;
 		// Just make sure you are not allowed to "zoom through the player and the ground, because that make no sense.
-		if(distanceFromPlayer < 0) {
-			distanceFromPlayer = 0;
+		if(distanceFromPlayer < -1) {
+			distanceFromPlayer = -1 ;
 		}
 	}
 	
+	/**
+	 * Calculate the pitch if the right button is clicked on the mouse. same as earlier. multiply with 0.1f to adjust the numbers
+	 * and increase smoothness.
+	 */
 	private void calculatePitch(/*Terrain terrain*/) {
 		if(Mouse.isButtonDown(1)) {
 			float pitchChange = Mouse.getDY() * 0.1f;
 			pitch  -= pitchChange;
 		}
 	}
-	
+	// Tried to stop the camera to go through the terrain, but if I prevent it in that way, it also will freeze the moment its outside the terrain
+	// because it has no terrain to ask if it's y position is high enough.
+/*
 //		if(isCameraWithinTerrain(terrain, this)){
 //			if( pitch < (terrain.getHeightOfTerrain(terrain.getX(), terrain.getZ()) + 5.0f) ) {
 //				pitch = terrain.getHeightOfTerrain(terrain.getX(), terrain.getZ()) + 5.0f ;
@@ -121,7 +143,10 @@ public class Camera {
 //		}
 //		return false;
 //	}
-	
+*/	
+	/**
+	 * Calculate the yaw angle, when the player press the left mouse button
+	 */
 	private void calculateAngleAroundPlayer() {
 		if(Mouse.isButtonDown(0)) {
 			float angleChange = Mouse.getDX() * 0.3f;

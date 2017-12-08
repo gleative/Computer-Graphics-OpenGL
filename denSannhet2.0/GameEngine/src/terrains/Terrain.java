@@ -36,7 +36,7 @@ public class Terrain {
 	// The height differences between the lowest point on the terrain and the highest point possible to achieve.
 	private static final float MAX_HEIGHT = 40;
 	
-	// 24 bit RGB ? max value of 256^3 
+	// 24 bit RGB ? max value of 256^3 this value represent the maximum colour value a pixel on the heightMap can possible have.
 	private static final float MAX_PIXEL_COLOUR = 256 * 256 * 256;
 	
 	// Terrain own X value.
@@ -144,7 +144,8 @@ public class Terrain {
 //		Returns the height of the BufferedImage.
 		int VERTEX_COUNT = image.getHeight();
 	
-//		Creates a Matrix with getHeights results.
+//		since each pixel in the heightMap represent a vertex. the vertex count of the terrain will now be decided
+		// by the pixel count of the hieghtMap
 		heights = new float [VERTEX_COUNT][VERTEX_COUNT];
 		
 //		Multiply the 
@@ -201,11 +202,11 @@ public class Terrain {
 	}
 	
 	
-	private float getHeight(int x, int z, BufferedImage image) {
-		if(x < 0 || x >= image.getHeight() || z < 0 || z >= image.getHeight()) {
+	private float getHeight(int x, int y, BufferedImage image) {
+		if(x < 0 || x >= image.getHeight() || y < 0 || y >= image.getHeight()) {
 			return 0;
 		}
-		float height = image.getRGB(x, z);
+		float height = image.getRGB(x, y);
 		height += MAX_PIXEL_COLOUR/2f;
 		height /= MAX_PIXEL_COLOUR/2f;
 		height *= MAX_HEIGHT;
